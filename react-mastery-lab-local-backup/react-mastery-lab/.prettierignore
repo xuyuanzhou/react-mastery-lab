@@ -1,6 +1,0 @@
-public/
-content/
-src/generated/
-dist/
-node_modules/
-package-lock.json
