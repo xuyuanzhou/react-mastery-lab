@@ -1,0 +1,96 @@
+/** @flow */
+
+import * as React from 'react';
+import {forwardRef} from 'react';
+import Bridge from 'react-devtools-shared/src/bridge';
+import Store from 'react-devtools-shared/src/devtools/store';
+import {subscribeToStoreErrors} from 'react-devtools-shared/src/devtools/storeErrorLogger';
+import DevTools from 'react-devtools-shared/src/devtools/views/DevTools';
+import {getSavedComponentFilters} from 'react-devtools-shared/src/utils';
+
+import type {Wall} from 'react-devtools-shared/src/frontend/types';
+import type {FrontendBridge} from 'react-devtools-shared/src/bridge';
+import type {Props} from 'react-devtools-shared/src/devtools/views/DevTools';
+import type {Config} from 'react-devtools-shared/src/devtools/store';
+
+export function createStore(bridge: FrontendBridge, config?: Config): Store {
+  const store = new Store(bridge, {
+    checkBridgeProtocolCompatibility: true,
+    supportsTraceUpdates: true,
+    ...config,
+  });
+  subscribeToStoreErrors(store, bridge);
+  return store;
+}
+
+export function createBridge(contentWindow: any, wall?: Wall): FrontendBridge {
+  if (wall == null) {
+    wall = {
+      listen(fn) {
+        // $FlowFixMe[missing-local-annot]
+        const onMessage = ({data}) => {
+          fn(data);
+        };
+        window.addEventListener('message', onMessage);
+        return () => {
+          window.removeEventListener('message', onMessage);
+        };
+      },
+      send(
+        event: string,
+        payload: mixed,
+        transferable?: $ReadOnlyArray<mixed>,
+      ) {
+        contentWindow.postMessage({event, payload}, '*', transferable);
+      },
+    };
+  }
+
+  return new Bridge(wall) as FrontendBridge;
+}
+
+export function initialize(
+  contentWindow: any,
+  {
+    bridge,
+    store,
+  }: {
+    bridge?: FrontendBridge,
+    store?: Store,
+  } = {},
+): component(...props: Props) {
+  if (bridge == null) {
+    bridge = createBridge(contentWindow);
+  }
+
+  // Type refinement.
+  const frontendBridge = bridge as any as FrontendBridge;
+
+  if (store == null) {
+    store = createStore(frontendBridge);
+  }
+
+  const onGetSavedPreferences = () => {
+    // This is the only message we're listening for,
+    // so it's safe to cleanup after we've received it.
+    frontendBridge.removeListener('getSavedPreferences', onGetSavedPreferences);
+
+    const data = {
+      componentFilters: getSavedComponentFilters(),
+    };
+
+    // The renderer interface can't read saved preferences directly,
+    // because they are stored in localStorage within the context of the extension.
+    // Instead it relies on the extension to pass them through.
+    frontendBridge.send('savedPreferences', data);
+  };
+
+  frontendBridge.addListener('getSavedPreferences', onGetSavedPreferences);
+
+  const ForwardRef = forwardRef<Props, mixed>((props, ref) => (
+    <DevTools ref={ref} bridge={frontendBridge} store={store} {...props} />
+  ));
+  ForwardRef.displayName = 'DevTools';
+
+  return ForwardRef;
+}
