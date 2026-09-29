@@ -110,3 +110,20 @@ test("导入器保留嵌套中文路径、图片和原始字节，拒绝重复�
     await fs.rm(temp, { recursive: true, force: true });
   }
 });
+test("完整 React 原理精通教材已接入，不能退回 28 篇", () => {
+  assert.equal(chapters.length, 110);
+  assert.equal(chapters.filter((c) => c.track === "mastery").length, 92);
+  assert.ok(chapters.some((c) => c.id.includes("00C-从编译入口到浏览器像素")));
+  assert.ok(chapters.some((c) => c.id.includes("04-useState与UpdateQueue")));
+  assert.ok(chapters.some((c) => c.id.includes("42-架构总复盘")));
+});
+
+test("截图版 UI 使用新的课程分组而不是旧 28 篇分组", async () => {
+  const model = await fs.readFile("src/model.ts", "utf8");
+  const app = await fs.readFile("src/App.tsx", "utf8");
+  for (const key of ["start", "runtime", "hooks", "concurrency", "browser", "server", "architecture", "practice"]) {
+    assert.match(model, new RegExp(`\\b${key}:`));
+  }
+  assert.doesNotMatch(app, /group === "prerequisites"/);
+  assert.doesNotMatch(app, /group === "core"/);
+});

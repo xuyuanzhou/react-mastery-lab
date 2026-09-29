@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
+    "dev": "node scripts/index.mjs && vite --host 0.0.0.0 --force --port 5173 --strictPort",
     "build": "node scripts/index.mjs && tsc -b && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "import": "node scripts/import.mjs",

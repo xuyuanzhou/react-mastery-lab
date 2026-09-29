@@ -155,3 +155,29 @@ Vite 已使用相对资源路径 `base: './'`，并采用 HashRouter，因此仓
 这是纯静态部署，不能执行服务端 API、SSR 或 RSC 运行时。本项目的对应内容是教材与官方源码阅读，不依赖服务端执行。
 
 配置依据：[GitHub 官方 Pages 自定义工作流说明](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。当前只交付部署配置，尚未关联你的 GitHub 仓库、推送或实际发布。
+
+## 完整教材模式（110 篇）
+
+当前截图版 UI 已完整接入 `content/React原理精通/`：
+
+- 110 篇可索引课程
+- 92 篇主教材
+- 18 篇快速导学
+- React v19.3.0 本地源码缓存
+
+`npm run dev` 会先执行 `scripts/index.mjs` 重建课程索引，再以固定 5173 端口启动 Vite。若 5173 被旧进程占用，会直接报错而不是自动切换端口。
+
+启动前建议：
+
+```bash
+lsof -i :5173
+# 如有旧进程，先停止它
+npm ci
+npm run dev
+```
+
+启动日志必须包含：
+
+```text
+Indexed 110 chapters (92 mastery), 1834 source files
+```

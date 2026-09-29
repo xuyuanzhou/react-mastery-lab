@@ -1,12 +1,14 @@
 export const groups: Record<string, string> = {
-  prerequisites: "01 / 前置基础",
-  core: "02 / 核心原理",
-  hooks: "03 / Hooks",
+  start: "01 / 学习起点",
+  runtime: "02 / React 运行时主线",
+  hooks: "03 / Hooks 与状态",
   concurrency: "04 / 调度与并发",
-  server: "05 / SSR 与 RSC",
-  architecture: "06 / 系统架构",
-  labs: "07 / 交互实验",
-  assessments: "08 / 自测与验收",
+  browser: "05 / 浏览器与事件",
+  server: "06 / Suspense · SSR · RSC",
+  architecture: "07 / 架构与性能",
+  practice: "08 / 源码阅读 · 调试 · 验收",
+  reference: "09 / 附录与参考",
+  quick: "10 / 快速导学",
 };
 export const glossary: Record<string, [string, string]> = {
   Fiber: [

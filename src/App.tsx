@@ -631,7 +631,7 @@ export default function App() {
                     progress.recent.find((id) =>
                       chapters.some((c) => c.id === id),
                     ) ||
-                      chapters.find((c) => c.group === "prerequisites")?.id ||
+                      chapters.find((c) => c.group === "start")?.id ||
                       chapters[0]?.id ||
                       "",
                   )}
@@ -676,30 +676,14 @@ export default function App() {
             </div>
             <div className="roadmap">
               {[
-                [
-                  "01",
-                  "夯实前置基础",
-                  "闭包 · 链表 · 位运算 · 浏览器",
-                  "prerequisites",
-                ],
-                [
-                  "02",
-                  "理解 React 的工作方式",
-                  "Element · Fiber · Render / Commit",
-                  "core",
-                ],
-                [
-                  "03",
-                  "追踪状态与更新",
-                  "Hooks · Queue · Lane · Scheduler",
-                  "hooks",
-                ],
-                [
-                  "04",
-                  "走向系统架构",
-                  "SSR · RSC · 并发 · 设计取舍",
-                  "architecture",
-                ],
+                ["01", "建立学习起点", "JavaScript · 浏览器 · JSX · 源码阅读", "start"],
+                ["02", "理解 React 运行时", "Element · Fiber · WorkLoop · Commit", "runtime"],
+                ["03", "掌握 Hooks 与状态", "Dispatcher · Queue · Effect · Context", "hooks"],
+                ["04", "理解调度与并发", "Lane · Scheduler · Transition", "concurrency"],
+                ["05", "连接浏览器运行时", "Event · DOM · Layout · Paint", "browser"],
+                ["06", "进入服务端模型", "Suspense · SSR · Hydration · RSC", "server"],
+                ["07", "上升到架构层", "Compiler · Renderer · 性能工程", "architecture"],
+                ["08", "源码阅读与验收", "Debug · Labs · Mini React · Assessments", "practice"],
               ].map(([n, title, desc, g]) => (
                 <Link
                   key={n}
@@ -742,7 +726,7 @@ export default function App() {
               </Link>
             </div>
             <p className="content-notice">
-              内置教材为本项目新增导学内容。原对话教材附件尚未提供，未将其标记为已迁移；支持完整目录导入。
+              已完整接入 React 原理精通教材：92 篇主教材 + 18 篇快速导学，并固定 React v19.3.0 源码基线。
             </p>
           </>
         )}
