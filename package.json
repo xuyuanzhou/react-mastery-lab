@@ -9,8 +9,14 @@
     "preview": "vite preview --host 0.0.0.0",
     "import": "node scripts/import.mjs",
     "index": "node scripts/index.mjs",
-    "test": "node --test scripts/*.test.mjs",
-    "sync-source": "node scripts/sync-source.mjs"
+    "test": "node --test scripts/*.test.mjs && vitest run",
+    "sync-source": "node scripts/sync-source.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src scripts vite.config.ts vitest.config.ts eslint.config.mjs",
+    "format": "prettier --write \"src/**/*.{ts,tsx,mjs}\" \"scripts/**/*.mjs\" \"*.{ts,mjs,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,mjs}\" \"scripts/**/*.mjs\" \"*.{ts,mjs,json}\"",
+    "check": "npm run format:check && npm run lint && npm test && npm run build",
+    "pretest": "npm run index"
   },
   "dependencies": {
     "highlight.js": "^11.11.1",
@@ -24,12 +30,22 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^10.11.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.12.0",
+    "jsdom": "^29.1.1",
     "prettier": "^3.9.9",
     "typescript": "^5.9.2",
-    "vite": "^6.3.6"
+    "typescript-eslint": "^8.71.0",
+    "vite": "^6.3.6",
+    "vitest": "^5.0.2"
   },
   "engines": {
     "node": ">=22"

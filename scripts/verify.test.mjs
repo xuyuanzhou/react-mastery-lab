@@ -2,11 +2,18 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { rebase, keyedDiff } from "../src/simulation.mjs";
+import { rebase, keyedDiff } from "../src/features/labs/simulation.mjs";
 const chapters = JSON.parse(
   await fs.readFile("src/generated/chapters.json", "utf8"),
 );
 const index = JSON.parse(await fs.readFile("public/source-index.json", "utf8"));
+const searchIndex = JSON.parse(
+  await fs.readFile("public/search-index.json", "utf8"),
+);
+const projectIndex = JSON.parse(
+  await fs.readFile("public/project-source-index.json", "utf8"),
+);
+const chapterBody = (id) => fs.readFile(path.join("content", id), "utf8");
 test("跨 Lane 更新保留顺序，最终从基线重放得到 22", () => {
   const input = [
     { lane: 2, kind: "add", value: 10 },
@@ -30,9 +37,11 @@ test("key 顺序 C A B 只给 A B 移动标记", () => {
   );
   assert.equal(keyedDiff(["A"], ["B"])[0].action, "插入");
 });
-test("全部教材内链都可解析", () => {
+test("全部教材内链都可解析", async () => {
   for (const c of chapters) {
-    for (const m of c.body.matchAll(/\]\(([^)]+\.md)(?:#[^)]*)?\)/g)) {
+    for (const m of (await chapterBody(c.id)).matchAll(
+      /\]\(([^)]+\.md)(?:#[^)]*)?\)/g,
+    )) {
       const href = m[1];
       if (/^https?:/.test(href)) continue;
       const id = path.posix.normalize(
@@ -45,9 +54,11 @@ test("全部教材内链都可解析", () => {
     }
   }
 });
-test("全部 source 锚点对应缓存中的真实文件和函数", () => {
+test("全部 source 锚点对应缓存中的真实文件和函数", async () => {
   for (const c of chapters) {
-    for (const m of c.body.matchAll(/\]\(source:([^#)]+)(?:#([^)]*))?\)/g)) {
+    for (const m of (await chapterBody(c.id)).matchAll(
+      /\]\(source:([^#)]+)(?:#([^)]*))?\)/g,
+    )) {
       const file = index.files.find((f) => f.path === m[1]);
       assert.ok(file, `${c.id}: ${m[1]}`);
       if (m[2] && !/^L\d+$/.test(m[2]))
@@ -119,11 +130,61 @@ test("完整 React 原理精通教材已接入，不能退回 28 篇", () => {
 });
 
 test("截图版 UI 使用新的课程分组而不是旧 28 篇分组", async () => {
-  const model = await fs.readFile("src/model.ts", "utf8");
-  const app = await fs.readFile("src/App.tsx", "utf8");
-  for (const key of ["start", "runtime", "hooks", "concurrency", "browser", "server", "architecture", "practice"]) {
+  const model = await fs.readFile("src/features/learning/model.ts", "utf8");
+  const app = await fs.readFile("src/app/App.tsx", "utf8");
+  for (const key of [
+    "start",
+    "runtime",
+    "hooks",
+    "concurrency",
+    "browser",
+    "server",
+    "architecture",
+    "practice",
+  ]) {
     assert.match(model, new RegExp(`\\b${key}:`));
   }
   assert.doesNotMatch(app, /group === "prerequisites"/);
   assert.doesNotMatch(app, /group === "core"/);
+});
+
+test("课程清单只含元数据，搜索正文按需加载且完整", () => {
+  assert.equal(searchIndex.length, chapters.length);
+  assert.ok(chapters.every((chapter) => !("body" in chapter)));
+  assert.ok(
+    searchIndex.every(
+      (entry) =>
+        chapters.some((chapter) => chapter.id === entry.id) &&
+        typeof entry.body === "string",
+    ),
+  );
+});
+
+test("工程实践源码锚点有效，公开快照仅含白名单文件", async () => {
+  const paths = new Set(projectIndex.files.map((file) => file.path));
+  assert.ok(paths.has("src/main.tsx"));
+  assert.ok(paths.has("src/app/App.tsx"));
+  assert.ok(paths.has(".github/workflows/deploy-pages.yml"));
+  assert.ok(
+    projectIndex.files.every(
+      (file) =>
+        !/(^|\/)(node_modules|generated|\.env|\.git)(\/|$)/.test(file.path),
+    ),
+  );
+  for (const chapter of chapters.filter(
+    (item) => item.group === "engineering",
+  )) {
+    for (const match of (await chapterBody(chapter.id)).matchAll(
+      /\]\(project:([^#)]+)(?:#([^)]*))?\)/g,
+    )) {
+      const file = projectIndex.files.find((item) => item.path === match[1]);
+      assert.ok(file, `${chapter.id}: ${match[1]}`);
+      if (match[2] && !/^L\d+$/.test(match[2])) {
+        assert.ok(
+          file.symbols.some((symbol) => symbol.name === match[2]),
+          `${chapter.id}: ${match[2]}#${match[2]}`,
+        );
+      }
+    }
+  }
 });

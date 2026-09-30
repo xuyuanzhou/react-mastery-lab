@@ -33,6 +33,7 @@ const groupTitles = {
   practice: "08 / 源码阅读 · 调试 · 验收",
   reference: "09 / 附录与参考",
   quick: "10 / 快速导学",
+  engineering: "11 / 工程实践",
 };
 
 function classifyMaster(id) {
@@ -47,21 +48,26 @@ function classifyMaster(id) {
   if (rel.startsWith("assessments/")) return { group: "practice", order: 830 };
   if (rel.startsWith("debugging/")) return { group: "practice", order: 850 };
   if (rel.startsWith("mini-react/")) return { group: "practice", order: 860 };
-  if (rel.startsWith("source-learning-app/")) return { group: "practice", order: 870 };
+  if (rel.startsWith("source-learning-app/"))
+    return { group: "practice", order: 870 };
   if (rel.startsWith("appendix/")) return { group: "reference", order: 900 };
   if (base === "课程路线-12周.md") return { group: "start", order: 2 };
-  if (base === "专家架构审计报告.md") return { group: "architecture", order: 799 };
+  if (base === "专家架构审计报告.md")
+    return { group: "architecture", order: 799 };
   if (base.startsWith("00P")) return { group: "start", order: 0 };
   if (base.startsWith("00A")) return { group: "start", order: 1 };
   if (base.startsWith("00-")) return { group: "runtime", order: 10 };
   if (base.startsWith("00B")) return { group: "runtime", order: 11 };
   if (base.startsWith("00C")) return { group: "runtime", order: 12 };
-  if ([1, 2, 6, 7, 10, 37, 38, 42, 43, 44, 45].includes(n)) return { group: "runtime", order: 100 + n };
-  if ([3, 4, 5, 11, 12, 16, 24, 26, 27, 28, 29, 30, 32, 33].includes(n)) return { group: "hooks", order: 200 + n };
+  if ([1, 2, 6, 7, 10, 37, 38, 42, 43, 44, 45].includes(n))
+    return { group: "runtime", order: 100 + n };
+  if ([3, 4, 5, 11, 12, 16, 24, 26, 27, 28, 29, 30, 32, 33].includes(n))
+    return { group: "hooks", order: 200 + n };
   if ([8, 31, 36].includes(n)) return { group: "concurrency", order: 300 + n };
   if ([9, 13, 35].includes(n)) return { group: "browser", order: 400 + n };
   if ([14, 15, 20, 39].includes(n)) return { group: "server", order: 500 + n };
-  if ([17, 19, 21, 22, 23, 25, 34, 40].includes(n)) return { group: "architecture", order: 600 + n };
+  if ([17, 19, 21, 22, 23, 25, 34, 40].includes(n))
+    return { group: "architecture", order: 600 + n };
   if ([18, 41, 46].includes(n)) return { group: "practice", order: 700 + n };
   return { group: "reference", order: 850 + (Number.isFinite(n) ? n : 0) };
 }
@@ -88,7 +94,9 @@ for (const p of await walk("content")) {
   const top = id.split("/")[0];
   const classified = isMastery
     ? classifyMaster(id)
-    : { group: "quick", order: (quickOrder[top] ?? 1090) + chapters.length };
+    : top === "engineering"
+      ? { group: "engineering", order: 1200 + chapters.length }
+      : { group: "quick", order: (quickOrder[top] ?? 1090) + chapters.length };
   chapters.push({
     id,
     title: body.match(/^#\s+(.+)/m)?.[1]?.trim() || path.basename(p, ".md"),
@@ -96,16 +104,31 @@ for (const p of await walk("content")) {
     groupTitle: groupTitles[classified.group] ?? classified.group,
     order: classified.order,
     track: isMastery ? "mastery" : "guide",
-    body,
   });
 }
 
-chapters.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id, "zh-CN", { numeric: true }));
+chapters.sort(
+  (a, b) =>
+    a.order - b.order || a.id.localeCompare(b.id, "zh-CN", { numeric: true }),
+);
 
 await fs.mkdir("src/generated", { recursive: true });
 await fs.rm("public/教材附件", { recursive: true, force: true });
 await fs.cp("content", "public/教材附件", { recursive: true });
 await fs.writeFile("src/generated/chapters.json", JSON.stringify(chapters));
+await fs.writeFile(
+  "public/search-index.json",
+  JSON.stringify(
+    await Promise.all(
+      chapters.map(async (chapter) => ({
+        id: chapter.id,
+        title: chapter.title,
+        group: chapter.group,
+        body: await fs.readFile(path.join("content", chapter.id), "utf8"),
+      })),
+    ),
+  ),
+);
 
 const files = [];
 for (const p of await walk("public/react-source")) {
@@ -121,7 +144,10 @@ for (const p of await walk("public/react-source")) {
     ];
     for (const re of patterns) {
       const m = line.match(re);
-      if (m) { symbols.push({ name: m[1], line: i + 1 }); break; }
+      if (m) {
+        symbols.push({ name: m[1], line: i + 1 });
+        break;
+      }
     }
   });
   files.push({
@@ -133,11 +159,62 @@ for (const p of await walk("public/react-source")) {
 }
 await fs.writeFile(
   "public/source-index.json",
-  JSON.stringify({ tag: "v19.3.0", origin: "https://github.com/facebook/react/tree/v19.3.0", files }),
+  JSON.stringify({
+    tag: "v19.3.0",
+    origin: "https://github.com/facebook/react/tree/v19.3.0",
+    files,
+  }),
+);
+
+// Publish an explicit, reviewable allowlist of this application's source for learning.
+// Never copy .env files, git metadata, dependencies, generated content, or user data.
+const projectPaths = [
+  ...(await walk("src")).filter(
+    (file) =>
+      !file.startsWith("src/generated/") && /\.(ts|tsx|mjs|css)$/.test(file),
+  ),
+  ...(await walk("scripts")).filter((file) => /\.mjs$/.test(file)),
+  "vite.config.ts",
+  "vitest.config.ts",
+  "tsconfig.json",
+  "package.json",
+  "eslint.config.mjs",
+  "README.md",
+  "ARCHITECTURE.md",
+  ".github/workflows/deploy-pages.yml",
+];
+await fs.rm("public/project-source", { recursive: true, force: true });
+const projectFiles = [];
+for (const file of projectPaths) {
+  const output = path.join("public/project-source", file);
+  await fs.mkdir(path.dirname(output), { recursive: true });
+  await fs.copyFile(file, output);
+  const body = await fs.readFile(file, "utf8");
+  const symbols = [];
+  body.split("\n").forEach((line, index) => {
+    const match = line.match(
+      /^\s*(?:export\s+(?:default\s+)?)?(?:async\s+)?(?:function|class)\s+([A-Za-z_$][\w$]*)/,
+    );
+    if (match) symbols.push({ name: match[1], line: index + 1 });
+  });
+  projectFiles.push({
+    path: file,
+    symbols,
+    lines: body.split("\n").length,
+    sha256: crypto.createHash("sha256").update(body).digest("hex"),
+  });
+}
+await fs.writeFile(
+  "public/project-source-index.json",
+  JSON.stringify({ tag: "this-project", files: projectFiles }),
 );
 
 const masteryCount = chapters.filter((c) => c.track === "mastery").length;
-console.log(`Indexed ${chapters.length} chapters (${masteryCount} mastery), ${files.length} source files`);
+console.log(
+  `Indexed ${chapters.length} chapters (${masteryCount} mastery), ${files.length} source files`,
+);
 if (chapters.length < 100 || masteryCount < 80) {
-  throw new Error(`课程索引异常：只生成 ${chapters.length} 篇，其中主教材 ${masteryCount} 篇。`);
+  throw new Error(
+    `课程索引异常：只生成 ${chapters.length} 篇，其中主教材 ${masteryCount} 篇。`,
+  );
 }

@@ -1,3 +1,14 @@
 node_modules/
 dist/
 *.local
+
+# Build-time indexes and public copies (source files live in content/ and src/)
+src/generated/
+public/教材附件/
+public/search-index.json
+public/source-index.json
+public/project-source/
+public/project-source-index.json
+*.tsbuildinfo
+# Temporary files created by desktop editors
+~$*

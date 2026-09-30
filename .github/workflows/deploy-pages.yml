@@ -25,10 +25,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Build and generate content/source indexes
-        run: npm run build
-      - name: Validate content and learning models
-        run: npm test
+      - name: Lint, test and build
+        run: npm run check
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:
