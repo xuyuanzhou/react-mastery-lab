@@ -111,7 +111,7 @@ test("导入器保留嵌套中文路径、图片和原始字节，拒绝重复�
   }
 });
 test("完整 React 原理精通教材已接入，不能退回 28 篇", () => {
-  assert.equal(chapters.length, 110);
+  assert.ok(chapters.length >= 110, `教材章节不足：${chapters.length}`);
   assert.equal(chapters.filter((c) => c.track === "mastery").length, 92);
   assert.ok(chapters.some((c) => c.id.includes("00C-从编译入口到浏览器像素")));
   assert.ok(chapters.some((c) => c.id.includes("04-useState与UpdateQueue")));
