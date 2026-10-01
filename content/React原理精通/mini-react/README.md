@@ -1,6 +1,27 @@
 # Mini React：用实现验证 React 架构理解
 
-> 目标不是造一个可用于生产的 React，而是用最少代码复现最重要的**不变量**。每个 Phase 都有测试，测试通过后才能进入下一阶段。
+> 目标不是造一个可用于生产的 React，而是用最少代码复现最重要的**不变量**。下面的 Phase 是完整练习路线；仓库中的可运行版本实现了核心子集，未实现的阶段明确标注为后续练习，不冒充 React v19.3.0 官方实现。
+
+## 先点击仓库内的真实源码
+
+这是可运行代码，不再只是伪代码。点击以下链接会把右侧切换到「本项目源码」并定位函数：
+
+1. [createElement：先产生 UI 描述](project:mini-react/src/element.mjs#createElement)
+2. [createRoot：保存 current 与待处理工作](project:mini-react/src/runtime.mjs#createRoot)
+3. [reconcileChildren：按 key/type 匹配 Fiber](project:mini-react/src/runtime.mjs#reconcileChildren)
+4. [performUnitOfWork：显式 DFS](project:mini-react/src/runtime.mjs#performUnitOfWork)
+5. [useState：Hook 链与更新入队](project:mini-react/src/runtime.mjs#useState)
+6. [enqueue 与 processQueue：环形队列和 Rebase](project:mini-react/src/queue.mjs#processQueue)
+7. [commitRoot：完成后才修改 Host](project:mini-react/src/runtime.mjs#commitRoot)
+8. [JSON/DOM Host 接口](project:mini-react/src/host.mjs#createJsonHost) 与 [行为测试](project:mini-react/test/runtime.test.mjs#L1)
+
+本地执行 `npm run mini:demo` 看 1 → 2 → 22 的结果，执行 `npm run mini:test` 跑完整测试。在 [createRoot](project:mini-react/src/runtime.mjs#createRoot) 中还可找到 `runAsync({ maxUnitsPerSlice })`：它用 MessageChannel 分段执行，测试会在两段之间插入更紧急的更新。源码固定在仓库 `mini-react/`，构建时自动加入本项目源码索引。
+
+| 已实现并有测试 | 仍需作为练习扩展 |
+|---|---|
+| Element、Fiber DFS、current/WIP、key/type 身份、Commit、Hook 链、UpdateQueue、两种 Lane 的 Rebase、MessageChannel 简化分片、Effect、Context、简化 Suspense、JSON/DOM Host、轨迹记录 | React 的完整 Scheduler/帧预算、完整 bailout、React DOM 事件与受控输入、真实 Hydration/RSC、完整 Profiler 与 Compiler |
+
+教学版用手动 `flush({ maxUnits })` 或 `runAsync({ maxUnitsPerSlice })` 展示可切片 Render；Commit 会重组 Host children；Suspense 只演示 pending → fallback → ping → retry。这些都不是官方源码的逐行简写。学完每个函数要再切回「React 官方源码」核对真实实现。
 
 ## 总原则
 

@@ -641,6 +641,9 @@ button.active {
   border: 1px solid var(--line);
   border-radius: 8px;
 }
+.lab-preview + .lab-preview {
+  margin-top: 12px;
+}
 .mini-nodes {
   display: flex;
   gap: 12px;
@@ -663,7 +666,7 @@ button.active {
   margin-bottom: 7px;
 }
 .lab-preview p {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--muted);
   margin: 0;
 }
@@ -679,11 +682,15 @@ button.active {
   width: 17px;
 }
 .content-notice {
-  font-size: 10px;
+  font-size: 13px;
   color: var(--muted);
   border-left: 2px solid var(--line);
   padding-left: 13px;
   margin-top: 28px;
+}
+.content-notice a {
+  color: var(--accent);
+  margin-left: 0.5em;
 }
 .main-footer {
   display: flex;
@@ -1046,10 +1053,14 @@ button.active {
   position: relative;
 }
 .markdown {
-  font-size: 14px;
-  line-height: 1.95;
+  min-width: 0;
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+  font-size: 15px;
+  line-height: 1.85;
   padding-top: 20px;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .markdown h1 {
   font-size: 30px;
@@ -1071,7 +1082,14 @@ button.active {
 .markdown p,
 .markdown ul,
 .markdown ol {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+}
+.markdown li + li {
+  margin-top: 6px;
+}
+.markdown ul,
+.markdown ol {
+  padding-left: 1.5em;
 }
 .markdown a {
   color: var(--accent);
@@ -1097,7 +1115,7 @@ button.active {
   padding: 18px;
   overflow: auto;
   font:
-    12px/1.9 "JetBrains Mono",
+    13px/1.75 "JetBrains Mono",
     monospace;
   max-width: 100%;
   white-space: pre;
@@ -1123,18 +1141,26 @@ button.active {
 .markdown blockquote p:last-child {
   margin: 0;
 }
+.markdown .table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  scrollbar-width: thin;
+}
 .markdown table {
   border-collapse: collapse;
-  width: 100%;
-  font-size: 12px;
-  display: block;
-  overflow: auto;
+  min-width: 100%;
+  width: max-content;
+  font-size: 13px;
 }
 .markdown td,
 .markdown th {
   border: 1px solid var(--line);
-  padding: 9px 12px;
+  padding: 10px 13px;
   text-align: left;
+  vertical-align: top;
 }
 .markdown th {
   background: var(--raised);
@@ -1184,10 +1210,54 @@ button.active {
 .toc button.indent {
   padding-left: 10px;
 }
+.chapter-complete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 26px 0 18px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--raised);
+}
+.chapter-complete > div {
+  display: grid;
+  gap: 5px;
+}
+.chapter-complete strong {
+  font-size: 14px;
+}
+.chapter-complete span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.chapter-complete button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 13px;
+}
+.chapter-complete button.active {
+  background: var(--accent);
+  color: var(--bg);
+}
 .chapter-pagination {
   display: flex;
   justify-content: space-between;
   gap: 15px;
+}
+@media (max-width: 650px) {
+  .chapter-complete {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }
 .chapter-pagination a {
   max-width: 48%;

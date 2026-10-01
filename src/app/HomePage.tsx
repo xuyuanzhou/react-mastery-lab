@@ -167,6 +167,19 @@ export default function HomePage({
           <ArrowUpRight />
         </Link>
       </div>
+      <div className="lab-preview">
+        <div>
+          <h3>阅读可运行的 Mini React 源码</h3>
+          <p>从 Element、Fiber 和 Hook 队列出发，对照测试与官方实现。</p>
+        </div>
+        <Link
+          to={chapterUrl("React原理精通/mini-react/README.md")}
+          className="round-link"
+          aria-label="进入 Mini React 源码课"
+        >
+          <ArrowUpRight />
+        </Link>
+      </div>
       <div className="section-heading">
         <h2>在实验中建立直觉</h2>
         <Link to="/labs">
@@ -193,6 +206,9 @@ export default function HomePage({
         篇主教材 + 28 篇快速导学 + 4
         篇工程实践。按能力里程碑学习，没有毕业时限；源码基线固定为 React
         v19.3.0。
+        <Link to={chapterUrl("React原理精通/49-如何贡献新章节.md")}>
+          添加或扩展章节
+        </Link>
       </p>
     </>
   );

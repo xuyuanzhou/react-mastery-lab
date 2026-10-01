@@ -156,6 +156,16 @@ export default function MarkdownArticle({
         }
         components={{
           a: mdLink,
+          table: ({ children }) => (
+            <div
+              className="table-scroll"
+              role="region"
+              aria-label="可横向滚动的表格"
+              tabIndex={0}
+            >
+              <table>{children}</table>
+            </div>
+          ),
           img: ({ src, ...props }) => (
             <img
               {...props}

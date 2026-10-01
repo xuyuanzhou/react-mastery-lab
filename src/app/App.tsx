@@ -258,6 +258,7 @@ export default function App() {
                   </button>
                   <button
                     className={progress.read.includes(doc.id) ? "active" : ""}
+                    aria-pressed={progress.read.includes(doc.id)}
                     onClick={() => toggle("read", doc.id)}
                   >
                     <Check size={15} />
@@ -289,6 +290,23 @@ export default function App() {
                 </aside>
               </div>
               <CallChain open={open} />
+              <div className="chapter-complete">
+                <div>
+                  <strong>读完这一章了吗？</strong>
+                  <span>标记后会记录在学习进度中，之后也可以取消。</span>
+                </div>
+                <button
+                  type="button"
+                  className={progress.read.includes(doc.id) ? "active" : ""}
+                  aria-pressed={progress.read.includes(doc.id)}
+                  onClick={() => toggle("read", doc.id)}
+                >
+                  <Check size={16} />
+                  {progress.read.includes(doc.id)
+                    ? "已读 · 点击取消"
+                    : "标记本章已读"}
+                </button>
+              </div>
               <div className="chapter-pagination">
                 {active > 0 ? (
                   <Link to={chapterUrl(chapters[active - 1].id)}>

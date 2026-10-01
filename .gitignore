@@ -1,5 +1,6 @@
 node_modules/
 dist/
+.vite/
 *.local
 
 # Build-time indexes and public copies (source files live in content/ and src/)
@@ -12,3 +13,6 @@ public/project-source-index.json
 *.tsbuildinfo
 # Temporary files created by desktop editors
 ~$*
+
+# Local chapter drafts are reviewed before entering the published curriculum.
+drafts/

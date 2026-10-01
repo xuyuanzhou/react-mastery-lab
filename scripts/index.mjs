@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
+import { chapterMeta, validateCommunityChapter } from "./chapter-schema.mjs";
 
 async function walk(dir) {
   const out = [];
@@ -46,10 +47,18 @@ const practiceOrder = new Map([
   ["43-从零到精通的因果知识图谱.md", 702],
   ["44-React源码阅读核心不变量与证明.md", 703],
   ["45-为什么React这样设计-架构权衡.md", 704],
+  ["48-行为测试与可访问性验收.md", 706],
 ]);
 
-function classifyMaster(id) {
+function classifyMaster(id, body) {
   const rel = id.slice(MASTER_PREFIX.length);
+  if (rel.startsWith("community/")) {
+    const result = validateCommunityChapter(body, id);
+    if (result.errors.length) {
+      throw new Error(`${id}: ${result.errors.join("；")}`);
+    }
+    return chapterMeta(body);
+  }
   const base = path.posix.basename(rel);
   const n = Number(base.match(/^(\d{2})/)?.[1]);
   if (rel.startsWith("prerequisites/")) {
@@ -85,6 +94,9 @@ function classifyMaster(id) {
   if (base.startsWith("18-源码阅读地图")) return { group: "start", order: 40 };
   if (base.startsWith("41-源码编译运行")) return { group: "start", order: 41 };
   if (base.startsWith("46-源码点击学习")) return { group: "start", order: 42 };
+  if (base.startsWith("47-业务状态建模")) return { group: "start", order: 36 };
+  if (base.startsWith("49-如何贡献新章节"))
+    return { group: "reference", order: 898 };
   if (base === "专家架构审计报告.md") return { group: "practice", order: 705 };
   if (practiceOrder.has(base))
     return { group: "practice", order: practiceOrder.get(base) };
@@ -126,7 +138,7 @@ for (const p of await walk("content")) {
   if (isMastery && hiddenMasterFiles.has(rel)) continue;
   const top = id.split("/")[0];
   const classified = isMastery
-    ? classifyMaster(id)
+    ? classifyMaster(id, body)
     : top === "engineering"
       ? { group: "engineering", order: chapters.length }
       : { group: "quick", order: quickOrder[top] ?? 9 };
@@ -209,6 +221,7 @@ const projectPaths = [
       !file.startsWith("src/generated/") && /\.(ts|tsx|mjs|css)$/.test(file),
   ),
   ...(await walk("scripts")).filter((file) => /\.mjs$/.test(file)),
+  ...(await walk("mini-react")).filter((file) => /\.mjs$/.test(file)),
   "vite.config.ts",
   "vitest.config.ts",
   "tsconfig.json",
