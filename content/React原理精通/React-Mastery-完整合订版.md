@@ -1,6 +1,6 @@
 # React 原理精通：完整合订版
 
-> 源码主基线：React v19.3.0。建议优先使用分章节文档和源码点击学习器；合订版用于全文检索。
+> 源码主基线：React v19.3.0。建议优先使用分章节文档和源码点击学习器；合订版用于全文检索，分章节文档为最新内容依据。主学习路线按能力验收，不设置学习期限。
 
 
 ---
@@ -12771,15 +12771,108 @@ useState
 
 ---
 
+<!-- SOURCE: 课程路线-能力里程碑.md -->
+
+# React Mastery：按能力验收的源码学习路线
+
+> 这条路线没有完成期限。读完章节、坚持了多少天、做完多少道题，都不能单独证明“精通”。每个阶段只有在你能**独立预测现象、解释机制、定位源码、运行实验并指出边界**时才算通过。可以反复回退、穿插项目实践；不需要按日历推进。
+>
+> 如需安排固定的学习节奏，可参考[可选的 12 周练习安排](课程路线-12周.md)。它是时间管理模板，不是毕业标准，也不代替本页的验收。
+
+## 怎样判断自己掌握了一项机制
+
+对一个新问题，按以下五层递进。不能只记住函数名或复制参考答案。
+
+| 层级 | 能做什么 | 验证方式 |
+|---|---|---|
+| 1. 预测 | 运行前写出 UI、状态或执行顺序会怎样变化 | 给最小 Demo 写预测与反例 |
+| 2. 解释 | 用数据结构和不变量说明“为什么”，区分相似概念 | 画树、队列或调用链并口述 |
+| 3. 定位 | 在固定的 React v19.3.0 源码中找到关键入口、字段与分支 | 从教材源码链接进入右侧工作台，记录 caller/callee |
+| 4. 验证 | 用断点、Profiler 或可重复的实验核对预测 | 保存实验步骤、观察结果、与预测不符的原因 |
+| 5. 迁移 | 面对不同例子仍能推导，并写出简化实现或生产修复 | 改一个条件、优先级或 key，解释结果如何改变 |
+
+阅读平台上的中文注释只能帮助定位，不能替代第 3–5 层。遇到不会的题先回到[因果知识图谱](43-从零到精通的因果知识图谱.md)查缺的前提，再继续当前章节。
+
+## 里程碑 0：补足语言、浏览器与 React 用户模型
+
+**学习内容：** [学习者起点](00P-学习者起点与前置知识总览.md)、[学习方法与版本基线](00A-学习方法-版本基线与源码标注规范.md)、`prerequisites/01–10`、[React 用户模型](00D-React用户模型与源码桥梁.md)。已有经验者可以直接做每章自检；答不清的内容再回读。
+
+**动手产物：** 画出环形链表插入前后指针、五节点 Fiber 树的 `child/sibling/return` 关系，以及 DFS 的 begin/complete 顺序；写一个能解释 state 快照、key 身份、Effect 清理的最小组件。
+
+**通过标准：** 不借助答案能说明闭包、链表、DFS、位集合、Event Loop、DOM 渲染与 JSX 转换分别在 React 哪一步出现。能解释“组件函数再次运行”为什么不等于“DOM 已更新”。
+
+## 里程碑 1：建立 Element → Fiber → Render → Commit 主干
+
+**学习内容：** [整体架构](00-整体架构与历史演进.md) → [Element/Fiber/Host Instance 区分](00B-JSX-ReactElement-Component-Fiber-HostInstance.md) → [Fiber 双树](01-Fiber数据结构与双缓冲.md) → [WorkLoop](02-Render工作循环.md) → [Reconciliation/Diff](06-Reconciliation与Diff.md) → [Commit](07-Commit阶段.md)。需要时用[源码阅读地图](18-源码阅读地图.md)定位。
+
+**动手产物：** 手算一棵树的 begin/complete 顺序；画 current/WIP 在一次成功提交和一次失败 Render 前后的指向；用稳定 key 与下标 key 各做一次列表重排实验。完成 [Lab 04](labs/04-Key-Diff与state-identity.md)。
+
+**通过标准：** 能回答“为什么 Render 可以重做，而 DOM 修改应等到 Commit”“为什么 key 改变会重置 state”，并分别指出源码中的工作单元、身份匹配与提交入口。不要把 Element、Fiber、真实 DOM 称为同一个“虚拟节点”。
+
+## 里程碑 2：掌握 Hooks、队列与 Effect
+
+**学习内容：** [Hook Dispatcher 与链表](03-Hooks-Dispatcher与链表.md) → [useState/UpdateQueue](04-useState与UpdateQueue.md) → [Effect](05-Effect系统.md) → [Context](11-Context原理.md) → [Memo 与 Bailout](12-memo与Bailout.md)。随后学习 [useReducer](28-useReducer源码原理.md)、[useMemo/useCallback](29-useMemo-useCallback源码原理.md)、[useEffectEvent](30-useEffectEvent与闭包模型.md)、[Ref](26-Ref系统与ImperativeHandle.md)；再读 [StrictMode](24-StrictMode与RulesOfReact.md)、[Batching/flushSync](27-Batching与flushSync.md)、[useId 等库级 Hooks](32-useId-useDebugValue-useInsertionEffect.md)、[Actions 与乐观更新](33-use-ActionState-Optimistic-FormStatus.md)。[Class 生命周期](16-Class生命周期与Fiber.md)用于比较历史模型，仍应在完整掌握阶段覆盖。
+
+**动手产物：** 完成 [Lab 01](labs/01-Hook顺序与renderWithHooks.md)、[Lab 02](labs/02-UpdateQueue与baseQueue-rebase.md)、[Lab 05](labs/05-Effect-Commit顺序.md)；画 Hook 链与 UpdateQueue 环；手算初始值 1、先 `+10` 后 `×2` 且优先级不同的 rebase，解释为什么最终是 22。
+
+**通过标准：** 能说明 Hook 为什么按顺序匹配、`pending/baseQueue/baseState/memoizedState` 各保存什么，区分 Render 快照、Ref、Memo、Effect 和外部订阅。能为一个真实“过度使用 Effect”案例移除不必要的 Effect，并解释新的数据流。
+
+## 里程碑 3：理解调度、并发与浏览器边界
+
+**学习内容：** [Lane/Root Scheduler](08-Lane与Scheduler.md) → [Transition/Deferred](31-useTransition与useDeferredValue.md) → [Event Loop 边界](36-浏览器EventLoop与React调度边界.md) → [浏览器像素流水线](09-浏览器渲染与React性能.md) → [React 事件系统](13-React事件系统.md) → [React DOM 属性与受控组件](35-ReactDOM属性系统与受控组件.md) → [一次 setState 到像素](10-完整setState调用链.md)。
+
+**动手产物：** 完成 [Lab 03](labs/03-RootScheduler与microtask.md)；画 `event priority → lane → root scheduling → Render → Commit → Style/Layout/Paint`，标出 React 与浏览器的边界；制作一个输入立即响应、昂贵列表可延后的 Demo，并用 Performance 面板排查瓶颈。
+
+**通过标准：** 能解释 Lane、Scheduler 回调与 microtask 是不同维度，说明并发 Render 为什么不能抢占单个长同步函数。面对卡顿时能先判断是 JS、React 工作、Layout 还是 Paint，而不直接套用 `useMemo`。
+
+## 里程碑 4：掌握异步边界与服务端模型
+
+**学习内容：** [Suspense](14-Suspense与Throw-Thenable.md) → [错误恢复](19-ErrorBoundary与错误恢复.md) → [SSR/Hydration](15-SSR与Hydration.md) → [RSC/Flight](20-ServerComponents与Flight.md) → [Suspense/Hydration 完整链](39-Suspense-Hydration完整调用链.md)。再对照[现代 React 总览](17-现代React关键能力.md)。
+
+**动手产物：** 完成 [Lab 06](labs/06-Suspense-Ping-Retry.md) 与 [Lab 07](labs/07-Hydration与EventReplay.md)；画 thenable 挂起、fallback、ping、retry 的状态图；在支持 RSC 的框架中观察 Server/Client 边界，并分别标出 Fizz HTML 与 Flight 数据。
+
+**通过标准：** 能分别解释“HTML 已可见”“边界已水合”“事件已处理”，能预测 hydration mismatch 的后果；不会把 Suspense 当成任意 Promise 的网络加载器，也不会把 RSC 等同 SSR。
+
+## 里程碑 5：从使用者上升到架构设计者
+
+**学习内容：** [External Store/Tearing](21-useSyncExternalStore与Tearing.md) → [Host Config/自定义 Renderer](22-HostConfig与自定义Renderer.md) → [React Compiler](23-ReactCompiler内部模型.md) → [Profiler/性能工程](25-Profiler与性能工程.md) → [Fragment/Portal/lazy/ViewTransition](34-Fragment-Portal-Lazy-ViewTransition.md) → [React 15 Stack Reconciler](40-React15-StackReconciler深度解析.md)。结合 [架构权衡](45-为什么React这样设计-架构权衡.md) 回答“为什么是这个设计”。
+
+**动手产物：** 完成 [Lab 08–10](labs/README.md)；做一个最小 Renderer、一个外部 Store 一致性实验、一次有前后数据的性能改进。对每项设计写“解决的约束、引入的成本、替代方案的失败场景”。
+
+**通过标准：** 能从“可中断 Render 但外部状态必须一致”的需求推导 snapshot 检查；能说明 Reconciler 与 DOM binding 的边界；不会把 Compiler、Memo、RSC 当成无条件性能保证。
+
+## 里程碑 6：综合追踪、实现与答辩
+
+**学习内容：** [完整渲染链路](00C-从编译入口到浏览器像素-完整渲染链路.md)、[初次 Mount](37-初次Mount完整调用链.md)、[Update/Unmount](38-更新与卸载完整调用链.md)、[架构总复盘](42-架构总复盘与核心不变量.md)、[因果图谱](43-从零到精通的因果知识图谱.md)、[不变量与证明](44-React源码阅读核心不变量与证明.md)、[源码调试环境](41-源码编译运行与调试环境.md)和[源码阅读指南](46-源码点击学习项目使用指南.md)。完成 [Mini React](mini-react/README.md) 与[综合挑战题](assessments/综合挑战题.md)。
+
+**最终证据包：**
+
+1. 脱稿画出一次 `setState` 到浏览器像素的主链，并指出可能被跳过、重试和不可随意中断的阶段。
+2. 从真实 React v19.3.0 源码中现场找到一个问题的入口、数据结构、分支与下一跳；说明教学简化模型和源码的差异。
+3. 用 Mini React 实现 Fiber 遍历、Hook 队列、简化 Lane/rebase、Commit 中的若干机制，并用测试说明不变量。
+4. 提交至少一份可复现实验记录：预测、操作、观察、偏差、结论；以及一份优化前后有证据的性能报告。
+5. 完成[章节自检](assessments/全章节自检题.md)与[综合挑战题](assessments/综合挑战题.md)，再核对[参考答案](assessments/综合挑战题-参考答案.md)；错题回到对应里程碑补齐。
+
+**通过标准：** 面对没有在教材中原样出现的新问题，仍能把用户可见行为、内部状态、源码分支和验证实验连接起来；能清楚说出证据范围与尚未验证的假设。这个能力可以不断加深，没有某一天自动“完全精通”的期限。
+
+## 复习规则
+
+完成一个里程碑后，隔一段时间换一个例子再答同类问题；若只能背出原答案，就尚未稳定掌握。项目里的“已读”只记录阅读进度，不代表通过验收。可以先完成某个业务需要的专题，但要把缺失的前置模型记下来并回补。完整目录与专题章不会因为不在某阶段的最短阅读链中而被删除。
+
+
+---
+
 <!-- SOURCE: 课程路线-12周.md -->
 
-# React Mastery：12 周源码课程路线
+# 可选的 12 周源码练习安排
+
+> 这是一份可自行调整的日程样例，**不是精通期限或毕业条件**。主路线请看[按能力验收的源码学习路线](课程路线-能力里程碑.md)：每个阶段以预测、解释、源码定位、实验验证和迁移能力为准。若需要更多时间，就在当前阶段继续练习；若已有基础，可跳过重复阅读并直接接受验收。
 
 ## Week 0：先修知识诊断（基础不足者必修）
 
 目标：消除“不是 React 本身造成的源码阅读障碍”。
 
-阅读：`00P` 与 `prerequisites/01~10`。已经熟悉某项可以快速通过自检，不要求重复学习。
+阅读：`00P`、`00A` 与 `prerequisites/01~10`。已经熟悉某项可以快速通过自检，不要求重复学习。随后阅读 `00D`，用公共 API 行为检查自己是否真正具备进入源码的用户模型。
 
 验收：能够解释闭包、调用栈、链表、DFS、bitmask、microtask、DOM/CSSOM、JSX transform、Flow 和 Source Map 分别如何出现在 React 源码学习中。
 
@@ -12788,7 +12881,7 @@ useState
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
-> 阅读源码时建议记住英文名称；中文用于快速建立概念映射。完整词表见 [`appendix/专业术语中英对照表.md`](appendix/%E4%B8%93%E4%B8%9A%E6%9C%AF%E8%AF%AD%E4%B8%AD%E8%8B%B1%E5%AF%B9%E7%85%A7%E8%A1%A8.md)。
+> 阅读源码时建议记住英文名称；中文用于快速建立概念映射。完整词表见 [`appendix/专业术语中英对照表.md`](appendix/专业术语中英对照表.md)。
 
 | English | 中文 |
 |---|---|
@@ -12809,27 +12902,26 @@ useState
 <!-- TERMS-AUTO-END -->
 
 
-> 默认每周 5 天、每天 1.5~2.5 小时。重点不是“12 周看完”，而是每周都留下可验证产物：图、源码笔记、实验记录、实现代码。
+> 以下每个 Week 只是可选节奏示例，可拆成多周，也可合并。重点是留下可验证产物：图、源码笔记、实验记录和实现代码。
 
-## Week 1：对象模型与历史约束
+## Week 1：React 用户模型与对象身份
 
-阅读：00、00A、00B、00C、16。
+阅读：00D、00、00B；需要帮助时查阅 18「源码阅读地图」与 41「源码编译运行」。`00C` 是后期综合追踪，不在本周精读；16「Class 生命周期」是历史扩展。
 
 产物：
 
 ```text
-一张 React 15 → Fiber → Hooks 的演进图
 一张 JSX / Element / Component / Fiber / HostInstance 对照图
-一张“源码 → JSX Transform → createRoot → Fiber → DOM → Browser Pixels”全链路图
+四张行为预测卡：state 快照、key 重置状态、Render/Commit、Effect 清理
 ```
 
-验收：不再用“Virtual DOM 节点”笼统代替 Element/Fiber；能从 `createRoot(container).render(<App />)` 讲到浏览器 Paint/Composite。
+验收：不再用“Virtual DOM 节点”笼统代替 Element/Fiber；不看源码也能预测四个行为。完整的 `createRoot → 浏览器像素` 追踪留到 Week 12。
 
 ## Week 2：Fiber 与 WorkLoop
 
 阅读：01、02。
 
-实验：手算 10 个 Fiber 的 begin/complete 顺序；调试 `performUnitOfWork`。
+实验：手算 10 个 Fiber 的 begin/complete 顺序；在完成 09「Debugger/Source Map」后调试 `performUnitOfWork`。
 
 产物：实现 Mini React Phase 1~3。
 
@@ -12851,15 +12943,15 @@ useState
 
 ## Week 5：Effect 与外部世界
 
-阅读：05、21、27。
+阅读：05、27。21「External Store」在掌握并发渲染后阅读。
 
-实验：Effect 顺序、external store、batching。
+实验：Lab 05「Effect 顺序」与 batching；此处只用简单订阅理解 cleanup。
 
 产物：解释 stale closure、effect synchronization、tearing 三者不是同一个问题。
 
 ## Week 6：Lane / Root Scheduler / Concurrent
 
-阅读：08、10、24。
+阅读：08、24、31；回到 04 对照同一队列中不同 lane 的跳过与重放。完整的「setState 到像素」留到浏览器流水线之后。
 
 实验：Lab 03。
 
@@ -12867,15 +12959,15 @@ useState
 
 ## Week 7：DOM Renderer / Event / Browser
 
-阅读：09、13、22。
+阅读：09、13、35，最后阅读 10「一次 setState 到屏幕像素」。22「Custom Renderer」留作架构扩展。
 
-实验：Portal event、Custom Renderer。
+实验：Portal event、受控输入与浏览器 Performance 记录。
 
 产物：实现 JSON Renderer；用 Performance 面板区分 React CPU 和 Layout/Paint。
 
 ## Week 8：Context / Memo / Performance
 
-阅读：11、12、25。
+阅读：11、12、21、25。此时已具备并发背景，可以研究 External Store / Tearing。
 
 实验：Lab 10 前半。
 
@@ -12899,7 +12991,7 @@ useState
 
 ## Week 11：RSC / Flight / Modern React
 
-阅读：17、20、23。
+阅读：17、20、23、33。先区分 Fizz/Flight，再观察 React 19 的 Action API。
 
 实验：Compiler / RSC 框架项目的最小可观察 demo。
 
@@ -12907,7 +12999,9 @@ useState
 
 ## Week 12：综合实现与论文式答辩
 
-完成：Mini React 到 Phase 14，综合挑战题。
+完成：`00C` 完整链路、37–39 的 Mount/Update/Suspense 追踪、42–45 架构复盘、Mini React 到 Phase 14、综合挑战题。
+
+日程表没有逐项列出的 16、22、28–30、32、34、36、40 等专题，可以在对应阶段穿插或延后；若目标是完整的源码与架构能力，最终仍须通过这些章节的验收。每读完对应机制就完成相关 Lab 与专属自检，不必等到最后一周才开始实验。
 
 最终答辩材料：
 
@@ -12919,17 +13013,17 @@ useState
 5. 一份真实性能优化实验报告
 ```
 
-如果这五项不依赖背稿能完成，已经进入真正的源码级能力区间。
+如果这五项不依赖背稿能完成，说明已具备较强的源码级能力；仍应按主路线用新问题检验迁移能力，不能因到达第 12 周就自动判定精通。
 
 
 ## 答案使用规则
 
-每周自检先闭卷完成，再查看：
+每个专题自检先闭卷完成，再查看：
 
 - `assessments/章节自检-参考答案.md`
 - `labs/实验结果与验收标准.md`
 
-第 12 周完成 50 道综合挑战题后，再查看 `assessments/综合挑战题-参考答案.md`，并按 0–4 分标准自评。
+完成综合挑战题后，再查看 `assessments/综合挑战题-参考答案.md`，并按 0–4 分标准自评；错题回到对应里程碑补课。
 
 
 ---

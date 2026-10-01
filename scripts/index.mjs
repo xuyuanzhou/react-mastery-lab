@@ -80,7 +80,8 @@ function classifyMaster(id) {
   if (rel.startsWith("source-learning-app/"))
     return { group: "practice", order: 870 };
   if (rel.startsWith("appendix/")) return { group: "reference", order: 900 };
-  if (base === "课程路线-12周.md") return { group: "start", order: 2 };
+  if (base === "课程路线-能力里程碑.md") return { group: "start", order: 2 };
+  if (base === "课程路线-12周.md") return { group: "reference", order: 999 };
   if (base.startsWith("18-源码阅读地图")) return { group: "start", order: 40 };
   if (base.startsWith("41-源码编译运行")) return { group: "start", order: 41 };
   if (base.startsWith("46-源码点击学习")) return { group: "start", order: 42 };

@@ -129,7 +129,7 @@ test("导入器保留嵌套中文路径、图片和原始字节，拒绝重复�
 });
 test("完整 React 原理精通教材已接入，不能退回 28 篇", () => {
   assert.ok(chapters.length >= 110, `教材章节不足：${chapters.length}`);
-  assert.equal(chapters.filter((c) => c.track === "mastery").length, 93);
+  assert.ok(chapters.filter((c) => c.track === "mastery").length >= 94);
   assert.ok(chapters.some((c) => c.id.includes("00C-从编译入口到浏览器像素")));
   assert.ok(chapters.some((c) => c.id.includes("00D-React用户模型")));
   assert.ok(chapters.some((c) => c.id.includes("04-useState与UpdateQueue")));
@@ -147,6 +147,26 @@ test("默认学习顺序先基础后源码，复盘和答案放在对应内容�
       at("assessments/全章节自检题-参考答案.md"),
   );
   assert.ok(at("prerequisites/01-closure.md") < at("core/01-elements.md"));
+  assert.equal(
+    chapters.find((c) => c.id.endsWith("课程路线-能力里程碑.md"))?.group,
+    "start",
+  );
+  assert.equal(
+    chapters.find((c) => c.id.endsWith("课程路线-12周.md"))?.group,
+    "reference",
+  );
+});
+
+test("主学习路线按能力验收，不设置学习期限", async () => {
+  const route = await fs.readFile(
+    "content/React原理精通/课程路线-能力里程碑.md",
+    "utf8",
+  );
+  assert.match(route, /没有完成期限/);
+  assert.match(route, /预测.*解释.*定位.*验证.*迁移/s);
+  assert.match(route, /里程碑 0/);
+  assert.match(route, /里程碑 6/);
+  assert.doesNotMatch(route, /每周\s*\d|第\s*\d+\s*周/);
 });
 
 test("章节自检不再使用同一道模板题覆盖全部章节", async () => {

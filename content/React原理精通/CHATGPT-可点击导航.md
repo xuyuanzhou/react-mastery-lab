@@ -17,5 +17,6 @@
 - [源码点击学习器使用指南](sandbox:/mnt/data/React原理精通/46-源码点击学习项目使用指南.md)
 - [专家架构审计报告](sandbox:/mnt/data/React原理精通/专家架构审计报告.md)
 - [专业术语中英对照](sandbox:/mnt/data/React原理精通/appendix/专业术语中英对照表.md)
-- [12 周课程路线](sandbox:/mnt/data/React原理精通/课程路线-12周.md)
+- [按能力验收的源码学习路线](课程路线-能力里程碑.md)
+- [可选的 12 周练习安排](课程路线-12周.md)
 - [完整合订版](sandbox:/mnt/data/React原理精通/React-Mastery-完整合订版.md)

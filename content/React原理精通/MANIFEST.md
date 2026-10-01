@@ -1,7 +1,7 @@
 # MANIFEST
 
 ## 教材规模
-- Markdown 文件：99
+- Markdown 文件：以当前目录为准，平台构建时自动索引
 - 内部 Markdown 链接：390
 - 断链：0
 - 源码学习器：`source-learning-app/`（零依赖，本地 HTTP 服务）
@@ -76,6 +76,7 @@
 - `45-为什么React这样设计-架构权衡.md`
 - `46-源码点击学习项目使用指南.md`
 - `课程路线-12周.md`
+- `课程路线-能力里程碑.md`
 - `专家架构审计报告.md`
 - `debugging/断点调试手册.md`
 - `mini-react/README.md`

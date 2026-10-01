@@ -81,8 +81,10 @@ export default function HomePage({
         </div>
       </div>
       <div className="section-heading">
-        <h2>从零到精通</h2>
-        <span>先建立模型，再走进实现</span>
+        <h2>按能力前进，不设毕业时限</h2>
+        <Link to={chapterUrl("React原理精通/课程路线-能力里程碑.md")}>
+          查看完整学习路线 <ArrowUpRight size={13} />
+        </Link>
       </div>
       <div className="roadmap">
         {[
@@ -186,8 +188,11 @@ export default function HomePage({
         </Link>
       </div>
       <p className="content-notice">
-        已完整接入 React 原理精通教材：93 篇主教材 + 28 篇快速导学 + 4
-        篇工程实践，并固定 React v19.3.0 源码基线。
+        已完整接入 React 原理精通教材：
+        {chapters.filter((chapter) => chapter.track === "mastery").length}{" "}
+        篇主教材 + 28 篇快速导学 + 4
+        篇工程实践。按能力里程碑学习，没有毕业时限；源码基线固定为 React
+        v19.3.0。
       </p>
     </>
   );
