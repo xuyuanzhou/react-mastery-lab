@@ -30,11 +30,33 @@ export default function CourseSidebar({
   const percent = Math.round(
     (validRead.length / Math.max(1, chapters.length)) * 100,
   );
+  const basics = chapters.filter((chapter) => chapter.track === "basics");
+  const basicsRead = basics.filter((chapter) =>
+    validRead.includes(chapter.id),
+  ).length;
   const courseGroups = [
     ...new Set([
       ...Object.keys(groups),
       ...chapters.map((chapter) => chapter.group),
     ]),
+  ];
+  const activeGroup =
+    chapters.find((chapter) => chapter.id === activeChapterId)?.group ??
+    "basicsStart";
+  const activeTrack = activeGroup.startsWith("basics") ? "basics" : "advanced";
+  const tracks = [
+    {
+      id: "basics",
+      title: "React 基础",
+      subtitle: "先会使用",
+      groups: courseGroups.filter((group) => group.startsWith("basics")),
+    },
+    {
+      id: "advanced",
+      title: "源码进阶",
+      subtitle: "再理解实现",
+      groups: courseGroups.filter((group) => !group.startsWith("basics")),
+    },
   ];
   return (
     <aside className={"sidebar " + (mobileOpen ? "mobile-open" : "")}>
@@ -68,40 +90,79 @@ export default function CourseSidebar({
         课程目录 <span>{chapters.length} 篇</span>
       </div>
       <div className="course-tree">
-        {courseGroups.map((g) => {
-          const list = chapters.filter((c) => c.group === g);
-          if (!list.length) return null;
+        {tracks.map((track) => {
+          const count = chapters.filter((chapter) =>
+            track.groups.includes(chapter.group),
+          ).length;
           return (
-            <details key={g} open>
-              <summary>
-                <ChevronDown size={13} />
-                {groups[g] || g}
-                <small>{list.length}</small>
+            <details
+              className="course-track"
+              key={`${track.id}-${activeTrack}`}
+              open={track.id === activeTrack}
+            >
+              <summary className="course-track-summary">
+                <div>
+                  <strong>{track.title}</strong>
+                  <span>{track.subtitle}</span>
+                </div>
+                <small>{count} 篇</small>
+                <ChevronDown size={15} />
               </summary>
-              {list.map((c, i) => (
-                <Link
-                  title={c.title}
-                  key={c.id}
-                  className={c.id === activeChapterId ? "selected" : ""}
-                  to={chapterUrl(c.id)}
-                  onClick={() => onNavigate()}
-                >
-                  <span
-                    className={
-                      "chapter-status " +
-                      (progress.read.includes(c.id) ? "done" : "")
-                    }
-                  >
-                    {progress.read.includes(c.id) ? (
-                      <Check size={11} />
-                    ) : (
-                      String(i + 1).padStart(2, "0")
-                    )}
-                  </span>
-                  <span>{c.title.replace(/^\d+[.、\s-]*/, "")}</span>
-                  {progress.bookmarks.includes(c.id) && <Bookmark size={10} />}
-                </Link>
-              ))}
+              <div className="course-track-groups">
+                {track.groups.map((group) => {
+                  const list = chapters.filter(
+                    (chapter) => chapter.group === group,
+                  );
+                  if (!list.length) return null;
+                  const label = (groups[group] || group).replace(
+                    /^基础\s*/,
+                    "",
+                  );
+                  return (
+                    <details
+                      className="course-section"
+                      key={`${group}-${activeGroup}`}
+                      open={group === activeGroup}
+                    >
+                      <summary className="course-section-summary">
+                        <ChevronDown size={13} />
+                        <span>{label}</span>
+                        <small>{list.length}</small>
+                      </summary>
+                      {list.map((chapter, index) => (
+                        <Link
+                          title={chapter.title}
+                          key={chapter.id}
+                          className={
+                            chapter.id === activeChapterId ? "selected" : ""
+                          }
+                          to={chapterUrl(chapter.id)}
+                          onClick={() => onNavigate()}
+                        >
+                          <span
+                            className={
+                              "chapter-status " +
+                              (progress.read.includes(chapter.id) ? "done" : "")
+                            }
+                          >
+                            {progress.read.includes(chapter.id) ? (
+                              <Check size={11} />
+                            ) : (
+                              String(index + 1).padStart(2, "0")
+                            )}
+                          </span>
+                          <span>
+                            {chapter.title.replace(/^\d+[.、\s-]*/, "")}
+                          </span>
+                          {progress.bookmarks.includes(chapter.id) && (
+                            <Bookmark size={10} />
+                          )}
+                        </Link>
+                      ))}
+                    </details>
+                  );
+                })}
+              </div>
             </details>
           );
         })}
@@ -114,7 +175,8 @@ export default function CourseSidebar({
           <i style={{ width: percent + "%" }} />
         </div>
         <small>
-          已完成 {validRead.length} / {chapters.length} 篇 · 按自己的节奏
+          已完成 {validRead.length} / {chapters.length} 篇 · 基础 {basicsRead} /{" "}
+          {basics.length} 篇
         </small>
       </div>
     </aside>

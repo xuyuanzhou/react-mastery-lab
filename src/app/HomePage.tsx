@@ -33,7 +33,7 @@ export default function HomePage({
             沿着源码，走得更深。
           </h1>
           <p>
-            从第一张 Fiber 工作卡片，到一次更新抵达屏幕。
+            从写出第一个组件，到读懂一次更新如何抵达屏幕。
             <br />
             阅读、追踪、实验，在同一个学习空间完成。
           </p>
@@ -41,7 +41,6 @@ export default function HomePage({
             className="primary"
             to={chapterUrl(
               progress.recent.find((id) => chapters.some((c) => c.id === id)) ||
-                chapters.find((c) => c.group === "start")?.id ||
                 chapters[0]?.id ||
                 "",
             )}
@@ -81,7 +80,44 @@ export default function HomePage({
         </div>
       </div>
       <div className="section-heading">
-        <h2>按能力前进，不设毕业时限</h2>
+        <h2>先掌握 React 基础</h2>
+        <span>从使用者出发，再进入源码</span>
+      </div>
+      <div className="roadmap">
+        {[
+          ["01", "React 入门", "组件 · JSX · 样式 · 纯渲染", "basicsStart"],
+          ["02", "组件与交互", "Props · 事件 · State · 表单", "basicsUi"],
+          [
+            "03",
+            "Hooks 与状态",
+            "Effect · Ref · Context · 自定义 Hook",
+            "basicsHooks",
+          ],
+          [
+            "04",
+            "工程实践",
+            "路由 · TypeScript · 测试 · 可访问性",
+            "basicsEngineering",
+          ],
+        ].map(([n, title, desc, group]) => (
+          <Link
+            key={group}
+            to={chapterUrl(
+              chapters.find((chapter) => chapter.group === group)?.id ??
+                chapters[0].id,
+            )}
+          >
+            <span className="roadmap-number">{n}</span>
+            <div>
+              <h3>{title}</h3>
+              <p>{desc}</p>
+            </div>
+            <ArrowUpRight size={18} />
+          </Link>
+        ))}
+      </div>
+      <div className="section-heading">
+        <h2>进入源码主线，按能力前进</h2>
         <Link to={chapterUrl("React原理精通/课程路线-能力里程碑.md")}>
           查看完整学习路线 <ArrowUpRight size={13} />
         </Link>

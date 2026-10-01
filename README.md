@@ -2,7 +2,7 @@
 
 一个可在线阅读的 React 19.3.0 源码学习平台，同时也是可供学习的 React + TypeScript + Vite 工程。线上地址：[React Mastery Lab](https://xuyuanzhou.github.io/react-mastery-lab/)。
 
-平台包含完整《React 原理精通》主教材（含[无期限的能力里程碑路线](content/React原理精通/课程路线-能力里程碑.md)）、28 篇快速导学及 4 篇工程实践课程。左侧读教材，右侧可切换阅读固定的 React v19.3.0 官方源码或本项目的构建期源码快照。官方源码提供可切换的中文讲解层：在关键函数行点击「译」查看机制、阅读重点和对应教材，原始源码与行号保持不变。教学实验用于理解机制，不是 React 内部运行时的完整复刻。
+平台新增 [34 篇 React 基础教程](content/basics/README.md)，按照官方文档的 React 入门、组件交互、Hooks 与状态和工程实践四个阶段组织，每篇包含示例、常见错误、自检问题、动手练习、官方文档入口与源码链接。推荐先学基础，再学习完整《React 原理精通》主教材（含[无期限的能力里程碑路线](content/React原理精通/课程路线-能力里程碑.md)）、28 篇快速导学及 4 篇工程实践课程。左侧读教材，右侧可切换阅读固定的 React v19.3.0 官方源码或本项目的构建期源码快照。官方源码提供可切换的中文讲解层：在关键函数行点击「译」查看机制、阅读重点和对应教材，原始源码与行号保持不变。教学实验用于理解机制，不是 React 内部运行时的完整复刻。
 
 仓库内的 [Mini React](mini-react/README.md) 是可运行的教学实现：`npm run mini:demo` 展示执行轨迹，`npm run mini:test` 验证核心不变量；教材中的 `project:` 链接可直接在右侧打开对应源码。手写或使用其他 AI 扩展教材时，请按 [CONTRIBUTING.md](CONTRIBUTING.md) 建草稿、验证固定版本源码与实验，并通过 PR 发布。
 
@@ -41,6 +41,7 @@ npm run check
 
 ```text
 content/                        Markdown 教材，内容的唯一维护入口
+  basics/                      34 篇基础课程和课程路线（官方 Learn 体系）
   React原理精通/               原有主教材与实验材料
   engineering/                 学习本项目的四篇工程实践课
 src/
@@ -97,3 +98,14 @@ npm run check
 也可用 `netlify.toml` 或 `vercel.json` 部署：构建命令 `npm run build`，输出目录 `dist`，Node.js 22+。这是纯静态站点；平台展示 SSR/RSC 教材与源码，但自身不运行 SSR/RSC 服务。
 
 学习进度仅保存在当前浏览器 `localStorage`。清除网站数据会清除记录，不会自动跨设备同步。
+
+## React 基础课学习路线
+
+新增课程位于左侧「React 基础」轨道的 01–04 四个阶段；原有教材位于「源码进阶」轨道。当前阶段自动展开，适合先掌握 React 再看源码的学习者。
+
+1. React 入门（01–08）：开发环境、JavaScript、组件、JSX、样式和纯渲染。
+2. 组件与交互（09–18）：Props、children、条件和列表、事件、State、表单与状态提升。
+3. Hooks 与状态（19–26）：useEffect、清理、useRef、Memo、Reducer、Context、自定义 Hook 和规则。
+4. 工程实践（27–34）：React Router、异步请求、TypeScript、Suspense、测试、无障碍、性能分析和 Todo 实战。
+
+[查看基础教程总览](content/basics/README.md)。基础课使用同一套全文搜索、书签、阅读进度及右侧官方/本项目源码阅读器；固定源码基线继续保持 React v19.3.0。

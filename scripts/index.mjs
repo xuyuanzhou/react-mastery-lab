@@ -24,6 +24,10 @@ const hiddenMasterFiles = new Set([
 ]);
 
 const groupTitles = {
+  basicsStart: "基础 01 / React 入门",
+  basicsUi: "基础 02 / 组件与交互",
+  basicsHooks: "基础 03 / Hooks 与状态",
+  basicsEngineering: "基础 04 / 工程实践",
   start: "01 / 学习起点",
   runtime: "02 / React 运行时主线",
   hooks: "03 / Hooks 与状态",
@@ -128,27 +132,47 @@ const quickOrder = {
   assessments: 7,
 };
 
+const basicsGroups = {
+  "01-start": "basicsStart",
+  "02-ui": "basicsUi",
+  "03-hooks": "basicsHooks",
+  "04-engineering": "basicsEngineering",
+};
+
+function classifyBasics(id) {
+  const [, section, filename] = id.split("/");
+  const group = basicsGroups[section];
+  const order = Number(filename?.match(/^(\d{2})-/)?.[1]);
+  if (!group || !Number.isInteger(order)) {
+    throw new Error(`React 基础课程路径无效：${id}`);
+  }
+  return { group, order };
+}
+
 const chapters = [];
 for (const p of await walk("content")) {
   if (!/\.md$/i.test(p)) continue;
   const body = await fs.readFile(p, "utf8");
   const id = p.slice("content/".length).replaceAll("\\", "/");
+  if (id === "basics/README.md") continue;
   const isMastery = id.startsWith(MASTER_PREFIX);
   const rel = isMastery ? id.slice(MASTER_PREFIX.length) : "";
   if (isMastery && hiddenMasterFiles.has(rel)) continue;
   const top = id.split("/")[0];
   const classified = isMastery
     ? classifyMaster(id, body)
-    : top === "engineering"
-      ? { group: "engineering", order: chapters.length }
-      : { group: "quick", order: quickOrder[top] ?? 9 };
+    : top === "basics"
+      ? classifyBasics(id)
+      : top === "engineering"
+        ? { group: "engineering", order: chapters.length }
+        : { group: "quick", order: quickOrder[top] ?? 9 };
   chapters.push({
     id,
     title: body.match(/^#\s+(.+)/m)?.[1]?.trim() || path.basename(p, ".md"),
     group: classified.group,
     groupTitle: groupTitles[classified.group] ?? classified.group,
     order: classified.order,
-    track: isMastery ? "mastery" : "guide",
+    track: isMastery ? "mastery" : top === "basics" ? "basics" : "guide",
   });
 }
 

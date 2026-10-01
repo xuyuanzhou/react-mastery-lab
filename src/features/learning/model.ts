@@ -1,4 +1,8 @@
 export const groups: Record<string, string> = {
+  basicsStart: "基础 01 / React 入门",
+  basicsUi: "基础 02 / 组件与交互",
+  basicsHooks: "基础 03 / Hooks 与状态",
+  basicsEngineering: "基础 04 / 工程实践",
   start: "01 / 学习起点",
   runtime: "02 / React 运行时主线",
   hooks: "03 / Hooks 与状态",

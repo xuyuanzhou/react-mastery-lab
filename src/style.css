@@ -291,6 +291,12 @@ button.active {
 .course-tree details {
   margin-bottom: 14px;
 }
+.course-tree .course-track {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin: 0 0 10px;
+  overflow: hidden;
+}
 .course-tree summary {
   display: flex;
   align-items: center;
@@ -300,6 +306,60 @@ button.active {
   padding: 6px 9px;
   cursor: pointer;
   list-style: none;
+}
+.course-tree summary::-webkit-details-marker {
+  display: none;
+}
+.course-tree .course-track-summary {
+  min-height: 58px;
+  padding: 10px 12px;
+  color: var(--text);
+  gap: 8px;
+}
+.course-track-summary div {
+  display: grid;
+  gap: 3px;
+}
+.course-track-summary strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.course-track-summary span {
+  color: var(--muted);
+  font-size: 10px;
+}
+.course-track-summary svg {
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+.course-track[open] > .course-track-summary svg,
+.course-section[open] > .course-section-summary svg {
+  transform: rotate(180deg);
+}
+.course-track-groups {
+  border-top: 1px solid var(--line);
+  padding: 6px;
+}
+.course-tree .course-section {
+  margin: 0;
+}
+.course-tree .course-section-summary {
+  min-height: 34px;
+  padding: 7px 8px;
+  border-radius: 5px;
+}
+.course-section-summary span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.course-section[open] > .course-section-summary {
+  background: var(--tint);
+  color: var(--accent);
+}
+.course-section > a {
+  margin-left: 7px;
 }
 .course-tree summary small {
   margin-left: auto;
