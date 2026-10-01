@@ -1,5 +1,8 @@
 # 05. Effect 系统：useEffect / useLayoutEffect
 
+> 源码定位：点击 [commitPassiveMountEffects](source:packages/react-reconciler/src/ReactFiberCommitWork.js#commitPassiveMountEffects)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/05-Effect-Commit顺序.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -310,3 +313,13 @@ flushPassiveEffectsImpl
 3. **脱稿解释：** 不使用“React 就是这样规定的”作为理由，而是用本章的不变量解释 API 约束。
 
 达到精通标准时，你应该能回答：**如果删除本章某个关键数据结构或约束，系统具体会在哪一步失去正确性？**
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** roomId 从 A 变 B 时，连接 Effect 的 cleanup/setup 应如何对应？为何不能在 Render 中连接？
+
+**参考解析：** 旧同步先清理，再为新依赖建立同步；Render 可能重试或放弃，若直接连接会产生幽灵副作用。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

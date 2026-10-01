@@ -72,3 +72,9 @@ createRoot
 - 为什么 Reconciler 不能直接等于 ReactDOM？
 - `react` 包与 `react-reconciler` 包分别面向谁？
 - 为什么学习 React 源码不应该从仓库目录第一行开始顺序读？
+
+## 参考答案
+
+1. Reconciler 负责计算组件/Fiber 工作和待提交变化，React DOM 负责浏览器 DOM 宿主的入口与绑定。React 还可以有非 DOM Renderer；如果两者完全等同，平台无关的协调逻辑便难以复用。对照 [completeWork](source:packages/react-reconciler/src/ReactFiberCompleteWork.js#completeWork) 与 [createRoot](source:packages/react-dom/src/client/ReactDOMRoot.js#createRoot)。
+2. `react` 包主要提供应用开发者使用的元素、组件和 Hook 公共 API；`react-reconciler` 包包含 Fiber、工作循环、Hook 实现等内部协调机制。公共 `useState` 是入口，状态队列的处理主要在 Reconciler 内部。
+3. 目录顺序不等于执行顺序。先用最小 Counter 触发一次更新，沿 `createRoot → updateContainer → scheduleUpdateOnFiber → Render → Commit` 追一条路径，记录跨包调用与状态变化，再按问题扩展到异常分支。否则很容易把工具代码、历史分支和当前执行路径混在一起。

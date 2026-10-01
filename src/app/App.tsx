@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { useProgress } from "../features/progress/useProgress";
 import CallChain from "../features/learning/CallChain";
 import { chapterUrl } from "./routes";
@@ -47,6 +48,16 @@ export default function App() {
     [searchOpen, setSearchOpen] = useState(false),
     [mobileNav, setMobileNav] = useState(false),
     [showSource, setShowSource] = useState(() => window.innerWidth > 1000),
+    [sourceWidth, setSourceWidth] = useState<number | null>(() => {
+      try {
+        const saved = Number(
+          localStorage.getItem("react-mastery-source-width"),
+        );
+        return Number.isFinite(saved) && saved >= 320 ? saved : null;
+      } catch {
+        return null;
+      }
+    }),
     [source, setSource] = useState<SourceTarget | null>({
       path: "packages/react-reconciler/src/ReactFiberHooks.js",
       symbol: "renderWithHooks",
@@ -95,6 +106,14 @@ export default function App() {
     return () => controller.abort();
   }, [searchOpen, searchData]);
   useEffect(() => {
+    if (sourceWidth === null) return;
+    try {
+      localStorage.setItem("react-mastery-source-width", String(sourceWidth));
+    } catch {
+      // The splitter still works for this session when storage is unavailable.
+    }
+  }, [sourceWidth]);
+  useEffect(() => {
     function keyboard(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
@@ -129,7 +148,14 @@ export default function App() {
       )
     : [];
   return (
-    <div className={"app " + (!showSource ? "source-hidden" : "")}>
+    <div
+      className={"app " + (!showSource ? "source-hidden" : "")}
+      style={
+        sourceWidth === null
+          ? undefined
+          : ({ "--source-width": `${sourceWidth}px` } as CSSProperties)
+      }
+    >
       <header className="topbar">
         <button
           className="mobile-menu"
@@ -347,7 +373,12 @@ export default function App() {
             </aside>
           }
         >
-          <SourceViewer target={source} onOpen={open} />
+          <SourceViewer
+            target={source}
+            onOpen={open}
+            sourceWidth={sourceWidth}
+            onResize={setSourceWidth}
+          />
         </Suspense>
       )}
       {searchOpen && (

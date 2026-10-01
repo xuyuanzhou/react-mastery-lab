@@ -1,5 +1,8 @@
 # 22. Reconciler 与 Renderer：Host Config、自定义 Renderer、React DOM 边界
 
+> 源码定位：点击 [completeWork](source:packages/react-reconciler/src/ReactFiberCompleteWork.js#completeWork)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/09-CustomRenderer.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -225,3 +228,13 @@ commitUpdate
 2. completeWork 中创建 DOM 为什么仍可以属于 Render Phase？
 3. Host Config 从软件架构角度属于什么设计思想？
 4. 为什么学自定义 Renderer 能纠正“Virtual DOM = DOM wrapper”的错误理解？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** JSON Renderer 与 React DOM 共享哪些层，必须替换哪一层？
+
+**参考解析：** 可共享 React Element、Reconciler、Fiber/Hook/调度思想；Host Config 决定宿主节点创建、更新、插入和删除。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

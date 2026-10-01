@@ -1,5 +1,8 @@
 # 04. useState：Hook、UpdateQueue 与调度
 
+> 源码定位：点击 [dispatchSetState](source:packages/react-reconciler/src/ReactFiberHooks.js#dispatchSetState)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/02-UpdateQueue与baseQueue-rebase.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -368,3 +371,13 @@ ensureRootIsScheduled
 3. **脱稿解释：** 不使用“React 就是这样规定的”作为理由，而是用本章的不变量解释 API 约束。
 
 达到精通标准时，你应该能回答：**如果删除本章某个关键数据结构或约束，系统具体会在哪一步失去正确性？**
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 初始值 1，同一队列先入低优先级 +10、再入高优先级 ×2；只处理高优先级后为什么最终仍是 22？
+
+**参考解析：** 首轮可得 2；baseState 保留 1，baseQueue 留下低优先级更新和高优先级重放副本，后续按原顺序算 22。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

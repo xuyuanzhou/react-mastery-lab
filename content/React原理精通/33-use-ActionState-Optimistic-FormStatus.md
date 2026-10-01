@@ -1,5 +1,7 @@
 # 33. use / useActionState / useOptimistic / useFormStatus
 
+> 源码定位：点击 [mountActionState](source:packages/react-reconciler/src/ReactFiberHooks.js#mountActionState)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -66,3 +68,15 @@ optimistic overlay：Action pending 期间临时投影
 1. 为什么 `useOptimistic` 必须区分 base state 与 optimistic state？
 2. `useActionState` 和普通 `useReducer` 的语义中心分别是什么？
 3. `use()` 与 Suspense 的关系是什么？
+
+<!-- ANSWER-GUIDE-START -->
+## 本章自检参考解析
+
+> 建议先遮住本节独立作答。每题至少说出“现象 → 内部机制 → 反例/边界”，再点击本章源码锚点核对。
+
+1. **乐观值只是待确认的视图。** base state 保存服务端确认的数据；optimistic overlay 在 Action 待完成时把预期变化叠在基线上。成功后基线吸收确认结果，失败或被拒绝时去掉叠层，界面回到真实基线。若直接污染 base state，就无法可靠回滚。
+2. **`useActionState` 围绕异步 Action 的提交结果建模。** 它把 action、结果 state 与 pending 状态联系起来；`useReducer` 的中心是对本地状态按 reducer 规则同步归约。两者都处理状态，但前者要考虑异步提交、顺序与表单等交互语义。
+3. **`use()` 读取可挂起的资源。** 读取未完成 thenable 时，当前 Render 会挂起，让最近的 Suspense boundary 决定 fallback/保留旧 UI；资源完成后 React 安排重试。它不是在 Render 中等待 Promise 阻塞线程，也不是把异步值直接变成同步 I/O。
+
+更多情境题及答案：[全章节自检题](assessments/全章节自检题.md) · [参考答案](assessments/全章节自检题-参考答案.md)。
+<!-- ANSWER-GUIDE-END -->

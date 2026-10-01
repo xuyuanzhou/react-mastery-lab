@@ -186,7 +186,7 @@ export default function HomePage({
         </Link>
       </div>
       <p className="content-notice">
-        已完整接入 React 原理精通教材：92 篇主教材 + 28 篇快速导学 + 4
+        已完整接入 React 原理精通教材：93 篇主教材 + 28 篇快速导学 + 4
         篇工程实践，并固定 React v19.3.0 源码基线。
       </p>
     </>

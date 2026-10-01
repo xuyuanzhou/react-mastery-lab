@@ -1,5 +1,7 @@
 # 19. Error Boundary 与错误恢复：Render Error、Commit Error、Root Recovery
 
+> 源码定位：点击 [createClassErrorUpdate](source:packages/react-reconciler/src/ReactFiberThrow.js#createClassErrorUpdate)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -217,3 +219,13 @@ Event handler 的异常不是 Render/Commit 树构建错误
 2. 为什么 Commit error 不能简单 rollback DOM？
 3. Suspense pending 和 rejected 为什么进入不同 boundary？
 4. 为什么 Event handler error 不等价于 child render error？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** Render 中抛错与 Commit 中执行副作用时报错，Error Boundary 能否按完全相同路径恢复？
+
+**参考解析：** 不能；错误发生阶段不同，捕获和恢复路径不同，不能把所有异常当作普通组件 Render 错误。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

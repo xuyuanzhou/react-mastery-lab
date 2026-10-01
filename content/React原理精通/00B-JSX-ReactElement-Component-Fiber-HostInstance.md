@@ -1,5 +1,7 @@
 # 00B. JSX → React Element → Component → Fiber → Host Instance
 
+> 源码定位：点击 [jsxProd](source:packages/react/src/jsx/ReactJSXElement.js#jsxProd)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -271,3 +273,13 @@ DOM 可能被替换/重新挂载
 为什么 React 可以支持非 DOM renderer？
 为什么 key 改变会重置 state？
 ```
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 同一组件每次返回新 React Element，为什么输入框中的 state 仍可能保留？
+
+**参考解析：** Element 是本次 UI 描述；同父级对应位置的 type/key 匹配后可复用 Fiber 身份和其状态。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

@@ -1,5 +1,7 @@
 # 24. StrictMode 与 Rules of React：用“可重放”检查程序正确性
 
+> 源码定位：点击 [renderWithHooks](source:packages/react-reconciler/src/ReactFiberHooks.js#renderWithHooks)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -175,3 +177,13 @@ ref callback 注册外部对象但无 cleanup
 1. 为什么“只在生产不重复”不能成为写不纯 Render 的理由？
 2. StrictMode 为什么和 Concurrent Render 的可重放哲学一致？
 3. Effect double-connect 暴露的是哪类 bug？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** StrictMode 在开发环境额外运行 setup/cleanup，暴露出重复订阅；应修复什么？
+
+**参考解析：** 让 cleanup 对称撤销 setup，保持 Render 纯粹；不能靠关闭 StrictMode 掩盖泄漏。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

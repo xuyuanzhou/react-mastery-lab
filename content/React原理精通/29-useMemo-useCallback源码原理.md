@@ -1,5 +1,7 @@
 # 29. useMemo / useCallback：Render 缓存，而不是状态管理
 
+> 源码定位：点击 [mountMemo](source:packages/react-reconciler/src/ReactFiberHooks.js#mountMemo)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -94,3 +96,13 @@ React Compiler 可以自动做大量基于依赖的 memoization。它并不让�
 3. 什么时候 `useCallback` 反而可能降低可维护性而没有性能收益？
 
 参考答案见答案册。
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 依赖数组没变时 useMemo 可以复用什么？为何不能把它当成持久业务 state？
+
+**参考解析：** 可复用上次 Render 的计算结果；它是性能缓存，业务正确性不应依赖缓存永不失效。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

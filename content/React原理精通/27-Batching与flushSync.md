@@ -1,5 +1,7 @@
 # 27. Automatic Batching、Root Microtask 与 flushSync
 
+> 源码定位：点击 [processRootScheduleInMicrotask](source:packages/react-reconciler/src/ReactFiberRootScheduler.js#processRootScheduleInMicrotask)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -180,3 +182,13 @@ DOM 读取时机
 2. 三次 `setCount(count+1)` 只 +1 与 batching 的真正关系是什么？
 3. Root microtask 为什么有助于 batching，但为什么 batching 又不等于 microtask？
 4. flushSync 为什么是 escape hatch？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 同一事件里的多个 setter 被批处理，queueMicrotask 和 flushSync 分别可能改变什么？
+
+**参考解析：** 批处理影响合并处理时机，root microtask 处理调度；flushSync 可强制提前同步提交，但不能当日常更新工具。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

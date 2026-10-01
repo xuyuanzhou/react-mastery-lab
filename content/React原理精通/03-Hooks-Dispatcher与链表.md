@@ -1,5 +1,8 @@
 # 03. Hooks：Dispatcher、链表与 Render Snapshot
 
+> 源码定位：点击 [renderWithHooks](source:packages/react-reconciler/src/ReactFiberHooks.js#renderWithHooks)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/01-Hook顺序与renderWithHooks.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -294,3 +297,13 @@ Function：
 3. **脱稿解释：** 不使用“React 就是这样规定的”作为理由，而是用本章的不变量解释 API 约束。
 
 达到精通标准时，你应该能回答：**如果删除本章某个关键数据结构或约束，系统具体会在哪一步失去正确性？**
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 把第二个 useState 放进条件分支后，下一次 Render 条件改变会怎样匹配 Hook？
+
+**参考解析：** 普通 Hook 按调用顺序沿 current 链表匹配；位置变化会错配或触发 Hook 数量错误，不按变量名识别。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

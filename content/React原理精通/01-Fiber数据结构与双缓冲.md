@@ -1,5 +1,7 @@
 # 01. Fiber 数据结构与双缓冲
 
+> 源码定位：点击 [createWorkInProgress](source:packages/react-reconciler/src/ReactFiber.js#createWorkInProgress)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -302,3 +304,13 @@ performUnitOfWork(A)
 3. **脱稿解释：** 不使用“React 就是这样规定的”作为理由，而是用本章的不变量解释 API 约束。
 
 达到精通标准时，你应该能回答：**如果删除本章某个关键数据结构或约束，系统具体会在哪一步失去正确性？**
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 根的 current 指向旧树时，workInProgress 上的 props 改变；若本轮失败，用户会看到什么？
+
+**参考解析：** 仍看到已提交的旧 UI；失败的 WIP 不应作为已提交树暴露，alternate 连接可供下一轮复用。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

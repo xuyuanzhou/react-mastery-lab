@@ -35,3 +35,14 @@ Concurrent Render 期间外部 store 可能变化，React 需要 snapshot 检查
 3. 找到 React 19.3 对应源码文件/函数。
 4. 用断点观察一次真实执行。
 5. 在 Mini React 中实现一个简化版本。
+
+## 把抽象不变量变成可观察证据
+
+| 不变量 | 最小反例 | 可观察的源码证据 |
+|---|---|---|
+| 未提交树不污染 current | Render 一半时子组件抛错 | 对照 `root.current` 与 WIP，确认切换只在成功 Commit 后 |
+| Hook 顺序稳定 | 第二个 `useState` 放入条件分支，再切换条件 | 跟踪 `currentHook` / `workInProgressHook` 推进和 Hook 数量校验 |
+| 被跳过的更新不丢 | 同一 Hook 队列先低优先级 `+10`、后高优先级 `×2` | 跟踪 `baseState`、`baseQueue`，最终按原顺序得 22 |
+| key 维护身份 | 列表交换位置，分别使用稳定 key 与下标 key | 比较 Fiber 复用与局部 state 归属 |
+
+**自检：** “我在代码中看到了 `alternate`，所以双缓冲已经得到证明”成立吗？**参考答案：** 不成立。字段存在只是实现线索；证明还需要观察失败或中断时 current 保持旧 UI、成功 Commit 后 root 指针切换，并排除在 Render 中直接污染可见宿主树的路径。证据应覆盖正常和反例两种执行。

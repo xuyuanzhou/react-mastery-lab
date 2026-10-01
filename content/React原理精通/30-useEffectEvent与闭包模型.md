@@ -1,5 +1,7 @@
 # 30. useEffectEvent 与闭包模型：Reactive 与 Non-Reactive Effect Logic
 
+> 源码定位：点击 [mountEvent](source:packages/react-reconciler/src/ReactFiberHooks.js#mountEvent)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -72,3 +74,15 @@ latest.current = value
 1. 为什么 `useEffectEvent` 不能简单理解成“自动 useRef”？
 2. 为什么它只能在 Effect/Effect Event 中调用，而不是普通事件处理器里随便调用？
 3. 哪些值应该留在 Effect deps 中？
+
+<!-- ANSWER-GUIDE-START -->
+## 本章自检参考解析
+
+> 建议先遮住本节独立作答。每题至少说出“现象 → 内部机制 → 反例/边界”，再点击本章源码锚点核对。
+
+1. **不等于自动 `useRef`。** Ref 是一个可变容器，开发者自己维护写入时机；Effect Event 是 React 提供的 Effect 内非响应式事件语义。它在被调用时读取当前已提交渲染中的值，但不把读取到的 `theme` 自动加入连接 Effect 的依赖。两者都能处理“读取较新值”，却有不同的调用约束和数据流含义。
+2. **调用位置有语义边界。** 它服务于由 Effect 建立的外部订阅、定时器或连接中的回调；普通点击事件应直接用事件处理器读取当次 render 的值。把 Effect Event 当通用稳定回调传给子组件，会让依赖关系与调用时机变得不清楚，也不符合 Hook 的使用约束。
+3. **决定外部同步关系的值仍留在 deps。** 例如 `roomId` 改变必须断开旧连接并连接新房间，所以 `[roomId]`；只改变通知外观的 `theme` 可由 Effect Event 在连接事件触发时读取，不需要因此重连。判断方法是：这个值变了，是否必须停止并重建外部资源？
+
+更多情境题及答案：[全章节自检题](assessments/全章节自检题.md) · [参考答案](assessments/全章节自检题-参考答案.md)。
+<!-- ANSWER-GUIDE-END -->

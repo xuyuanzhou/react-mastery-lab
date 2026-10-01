@@ -79,3 +79,15 @@ Hooks 不只是 API。现代 Hook 系统与 `Fiber.memoizedState`、UpdateQueue�
 1. Stack Reconciler 最大限制是 Class 语法还是工作模型？
 2. Fiber 为什么必须显式保存 parent/child/sibling？
 3. 为什么旧 `componentWill*` 生命周期与可重做 render 冲突？
+
+<!-- ANSWER-GUIDE-START -->
+## 本章自检参考解析
+
+> 建议先遮住本节独立作答。每题至少说出“现象 → 内部机制 → 反例/边界”，再点击本章源码锚点核对。
+
+1. **限制在同步递归工作模型。** Class 语法本身可以继续存在；Stack Reconciler 依赖 JS 调用栈推进整棵树，难以把任意已做工作保存、让出后再恢复，也难以保持可丢弃的候选树。
+2. **显式指针把遍历状态留在数据结构里。** `child` 下钻、`sibling` 转向、`return` 回父；React 可保存当前工作单元，稍后继续 DFS，并通过 `alternate` 维护 current/WIP 两棵树。光靠调用栈的返回地址做不到同样的可控暂停。
+3. **旧生命周期可能在未提交的 Render 中执行副作用。** 若 Render 被重做或丢弃，副作用却已发出，就会重复订阅、请求或修改外部对象。现代模型要求 Render 纯，把需要同步外部系统的操作放在提交后的 Effect/生命周期边界。
+
+更多情境题及答案：[全章节自检题](assessments/全章节自检题.md) · [参考答案](assessments/全章节自检题-参考答案.md)。
+<!-- ANSWER-GUIDE-END -->

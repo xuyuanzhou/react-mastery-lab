@@ -1,5 +1,7 @@
 # 17. 现代 React 总览：从 Fiber Runtime 到 Async UI、Server 与 Compiler
 
+> 源码定位：点击 [createRoot](source:packages/react-dom/src/client/ReactDOMRoot.js#createRoot)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -280,3 +282,13 @@ Compiler 是否会改写它周围的数据流？
 ```
 
 能用这组问题分析未来 API，才算真正具备架构级 React 能力。
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 把 Transition、Suspense、RSC、Compiler 全称为“渲染优化”有什么问题？
+
+**参考解析：** 它们分别涉及更新紧急度、异步边界、执行环境/传输协议、编译期缓存，解决不同约束。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

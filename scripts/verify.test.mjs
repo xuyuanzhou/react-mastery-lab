@@ -55,10 +55,15 @@ test("全部教材内链都可解析", async () => {
   }
 });
 test("全部 source 锚点对应缓存中的真实文件和函数", async () => {
+  let linkedChapters = 0;
   for (const c of chapters) {
-    for (const m of (await chapterBody(c.id)).matchAll(
-      /\]\(source:([^#)]+)(?:#([^)]*))?\)/g,
-    )) {
+    const links = [
+      ...(await chapterBody(c.id)).matchAll(
+        /\]\(source:([^#)]+)(?:#([^)]*))?\)/g,
+      ),
+    ];
+    if (links.length) linkedChapters++;
+    for (const m of links) {
       const file = index.files.find((f) => f.path === m[1]);
       assert.ok(file, `${c.id}: ${m[1]}`);
       if (m[2] && !/^L\d+$/.test(m[2]))
@@ -68,6 +73,7 @@ test("全部 source 锚点对应缓存中的真实文件和函数", async () => 
         );
     }
   }
+  assert.ok(linkedChapters >= 75, `只有 ${linkedChapters} 篇可直接跳转源码`);
 });
 test("官方包版本与声明一致，许可证随项目保留", async () => {
   const p = JSON.parse(
@@ -123,10 +129,111 @@ test("导入器保留嵌套中文路径、图片和原始字节，拒绝重复�
 });
 test("完整 React 原理精通教材已接入，不能退回 28 篇", () => {
   assert.ok(chapters.length >= 110, `教材章节不足：${chapters.length}`);
-  assert.equal(chapters.filter((c) => c.track === "mastery").length, 92);
+  assert.equal(chapters.filter((c) => c.track === "mastery").length, 93);
   assert.ok(chapters.some((c) => c.id.includes("00C-从编译入口到浏览器像素")));
+  assert.ok(chapters.some((c) => c.id.includes("00D-React用户模型")));
   assert.ok(chapters.some((c) => c.id.includes("04-useState与UpdateQueue")));
   assert.ok(chapters.some((c) => c.id.includes("42-架构总复盘")));
+});
+
+test("默认学习顺序先基础后源码，复盘和答案放在对应内容之后", () => {
+  const at = (part) =>
+    chapters.findIndex((chapter) => chapter.id.includes(part));
+  assert.ok(at("prerequisites/10-") < at("00D-React用户模型"));
+  assert.ok(at("00D-React用户模型") < at("00-整体架构"));
+  assert.ok(at("39-Suspense-Hydration") < at("00C-从编译入口"));
+  assert.ok(
+    at("assessments/全章节自检题.md") <
+      at("assessments/全章节自检题-参考答案.md"),
+  );
+  assert.ok(at("prerequisites/01-closure.md") < at("core/01-elements.md"));
+});
+
+test("章节自检不再使用同一道模板题覆盖全部章节", async () => {
+  const quiz = await fs.readFile(
+    "content/React原理精通/assessments/全章节自检题.md",
+    "utf8",
+  );
+  const answers = await fs.readFile(
+    "content/React原理精通/assessments/全章节自检题-参考答案.md",
+    "utf8",
+  );
+  const questions = [...quiz.matchAll(/^\*\*情境题：\*\* (.+)$/gm)].map(
+    (match) => match[1],
+  );
+  assert.equal(questions.length, 44);
+  assert.equal(new Set(questions).size, 44);
+  assert.equal([...answers.matchAll(/^\*\*参考要点：\*\*/gm)].length, 44);
+});
+
+test("前置课自检有可核对的答案，链表与 DFS 有完整推演", async () => {
+  const prerequisites = (
+    await fs.readdir("content/React原理精通/prerequisites")
+  ).filter((name) => /^\d{2}-.*\.md$/.test(name));
+  assert.equal(prerequisites.length, 10);
+  for (const name of prerequisites) {
+    const body = await fs.readFile(
+      path.join("content/React原理精通/prerequisites", name),
+      "utf8",
+    );
+    assert.match(body, /## 自检/);
+    assert.match(body, /## 参考(?:答案|解释)/, `${name} 缺参考答案`);
+  }
+  const structures = await fs.readFile(
+    "content/React原理精通/prerequisites/02-数据结构-链表树队列与位运算.md",
+    "utf8",
+  );
+  assert.match(structures, /U1 → U2 → U3 → U4 → U1/);
+  assert.match(structures, /begin 顺序是 A、B、D、E、C/);
+  assert.match(structures, /complete 顺序是 D、E、B、C、A/);
+});
+
+test("核心课程与专题课程均提供就近自检解析", async () => {
+  const root = "content/React原理精通";
+  for (const key of [
+    "00",
+    "00B",
+    ...Array.from({ length: 29 }, (_, i) => String(i + 1).padStart(2, "0")),
+  ]) {
+    const name = (await fs.readdir(root)).find(
+      (file) => file.startsWith(`${key}-`) && file.endsWith(".md"),
+    );
+    assert.ok(name, `缺少 ${key} 章`);
+    const body = await fs.readFile(path.join(root, name), "utf8");
+    assert.match(body, /## 本章情境自检与参考解析/, `${name} 缺少情境题答案`);
+  }
+  for (let n = 30; n <= 41; n++) {
+    const key = String(n).padStart(2, "0");
+    const name = (await fs.readdir(root)).find(
+      (file) => file.startsWith(`${key}-`) && file.endsWith(".md"),
+    );
+    assert.ok(name, `缺少 ${key} 章`);
+    const body = await fs.readFile(path.join(root, name), "utf8");
+    assert.match(body, /## 本章自检参考解析/, `${name} 缺少逐题解析`);
+  }
+  for (let n = 42; n <= 45; n++) {
+    const name = (await fs.readdir(root)).find(
+      (file) => file.startsWith(`${n}-`) && file.endsWith(".md"),
+    );
+    const body = await fs.readFile(path.join(root, name), "utf8");
+    assert.match(body, /自检/, `${name} 缺少架构自检`);
+    assert.match(body, /参考(?:答案|解析|推导)/, `${name} 缺少架构题答案`);
+  }
+  for (const group of [
+    "prerequisites",
+    "core",
+    "hooks",
+    "concurrency",
+    "server",
+    "architecture",
+  ]) {
+    for (const name of (await fs.readdir(`content/${group}`)).filter((file) =>
+      file.endsWith(".md"),
+    )) {
+      const body = await fs.readFile(`content/${group}/${name}`, "utf8");
+      assert.match(body, /## 参考解释/, `${group}/${name} 缺少快速导学答案`);
+    }
+  }
 });
 
 test("截图版 UI 使用新的课程分组而不是旧 28 篇分组", async () => {

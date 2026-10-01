@@ -1,5 +1,8 @@
 # 25. React 性能工程：Profiler、Performance Tracks 与浏览器流水线
 
+> 源码定位：点击 [performWorkOnRoot](source:packages/react-reconciler/src/ReactFiberWorkLoop.js#performWorkOnRoot)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/10-Compiler与Profiling.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -229,3 +232,13 @@ Conclusion:
 2. 为什么 useMemo 不能修复 Layout？
 3. key 不稳定会怎样同时伤害 Render 与 Commit？
 4. Compiler 自动 memo 后，为什么仍需要架构级性能设计？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 页面卡顿时，怎样判断瓶颈在 React Render、Commit 还是浏览器 Layout？
+
+**参考解析：** 先用 Profiler 和浏览器 Performance 对齐时间线，按证据定位阶段，再提出可测量的优化假设。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

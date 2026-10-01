@@ -1,5 +1,7 @@
 # 35. React DOM 属性系统与受控组件
 
+> 源码定位：点击 [ReactDOMComponent.js](source:packages/react-dom-bindings/src/client/ReactDOMComponent.js#L1)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -58,3 +60,15 @@ React state 是 source of truth
 1. 为什么 `value` 不能按普通 attribute 理解？
 2. 受控 input 的 source of truth 在哪里？
 3. React DOM 为什么需要独立于 reconciler 的 Host Config/DOM binding 层？
+
+<!-- ANSWER-GUIDE-START -->
+## 本章自检参考解析
+
+> 建议先遮住本节独立作答。每题至少说出“现象 → 内部机制 → 反例/边界”，再点击本章源码锚点核对。
+
+1. **`value` 是动态属性与受控状态的一部分。** HTML attribute 常描述初始标记，而输入过程使用 DOM property；React 还需跟踪用户输入、选择位置与受控更新。只把 `value` 当字符串 attribute 写一次，无法解释键入后的同步行为。
+2. **受控 input 的真值来自 React state/props。** `onChange` 把用户输入写回 state，下一次 Render 用新的 `value` 与 DOM 对齐。若只手动改 DOM 而不更新 state，之后的 React 更新可能把输入恢复成旧 state。
+3. **Reconciler 只决定“这个 Host 节点需要怎样变”。** React DOM 绑定层负责浏览器属性、事件、样式和输入控件的具体语义；自定义 Renderer 可换成其他宿主实现而保留 Fiber、协调与调度机制。
+
+更多情境题及答案：[全章节自检题](assessments/全章节自检题.md) · [参考答案](assessments/全章节自检题-参考答案.md)。
+<!-- ANSWER-GUIDE-END -->

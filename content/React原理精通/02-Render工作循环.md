@@ -1,5 +1,7 @@
 # 02. Render 工作循环：beginWork / completeWork
 
+> 源码定位：点击 [performUnitOfWork](source:packages/react-reconciler/src/ReactFiberWorkLoop.js#performUnitOfWork)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -273,3 +275,13 @@ WIP Tree 只是候选结果
 3. **脱稿解释：** 不使用“React 就是这样规定的”作为理由，而是用本章的不变量解释 API 约束。
 
 达到精通标准时，你应该能回答：**如果删除本章某个关键数据结构或约束，系统具体会在哪一步失去正确性？**
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 给 A 的子 B、兄弟 C 手算 begin/complete 顺序，并指出返回到父节点依赖哪个指针。
+
+**参考解析：** DFS 先 begin A/B，B 无子后 complete B，再走 C，最后 complete A；return 指针负责回到父节点。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

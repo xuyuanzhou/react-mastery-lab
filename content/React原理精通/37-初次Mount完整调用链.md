@@ -1,5 +1,7 @@
 # 37. 初次 Mount：从 createRoot 到第一个像素
 
+> 源码定位：点击 [createRoot](source:packages/react-dom/src/client/ReactDOMRoot.js#createRoot)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -80,3 +82,15 @@ commitRoot
 1. 为什么 DOM instance 可以在 Render 的 complete 阶段创建，但不能在那时把它随便插进可见容器？
 2. `root.render` 为什么不是“立即把 JSX 转成 DOM”？
 3. 首次 mount 哪些阶段能被并发 render 放弃？
+
+<!-- ANSWER-GUIDE-START -->
+## 本章自检参考解析
+
+> 建议先遮住本节独立作答。每题至少说出“现象 → 内部机制 → 反例/边界”，再点击本章源码锚点核对。
+
+1. **Render 可以准备，但不能公布半成品。** `completeWork` 可创建离屏 Host instance、设置属性并组装候选结构；如果此时把节点直接插入可见容器，而后续 Render 挂起或失败，用户会看到未提交的混合 UI。真正可见的宿主变更由 Commit 集中执行。
+2. **`root.render` 是提交更新请求。** 它把 React Element 交给 Root 更新队列，之后经过优先级选择、Render 的 begin/complete、Commit，最后浏览器还会进行 Style/Layout/Paint。调用返回值或一行 JSX 都不等于像素已经画出。
+3. **可放弃的是尚未提交的候选 Render。** 初次 Mount 没有旧子树可复用，但 WIP 的构建仍可能被更紧急更新、挂起或错误打断并重做；已经进入同步 Commit 的宿主修改不能像 WIP 一样随意丢弃。
+
+更多情境题及答案：[全章节自检题](assessments/全章节自检题.md) · [参考答案](assessments/全章节自检题-参考答案.md)。
+<!-- ANSWER-GUIDE-END -->

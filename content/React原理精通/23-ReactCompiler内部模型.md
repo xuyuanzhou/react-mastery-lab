@@ -1,4 +1,5 @@
 # 23. React Compiler：HIR、数据流分析、Rules of React 与自动 Memoization
+> 学完即练：[对应实验](labs/10-Compiler与Profiling.md)。先写预测，再观察源码和结果。
 
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
@@ -238,3 +239,13 @@ parse/lower
 2. 自动 memo 为什么依赖 Render purity？
 3. 为什么 Compiler 不是“自动包 React.memo”？
 4. 为什么 Compiler 不能解决 layout thrashing？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 为何 React Compiler 不能对任意含副作用的组件安全做自动 memo？
+
+**参考解析：** 编译器依赖纯度和可分析的数据流；任意副作用或原地修改会改变缓存/重放后的语义。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

@@ -1,5 +1,7 @@
 # 13. React DOM 事件系统：Native Event → Fiber → Dispatch Queue → Lane
 
+> 源码定位：点击 [ReactDOMEventListener.js](source:packages/react-dom-bindings/src/events/ReactDOMEventListener.js#L1)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -425,3 +427,13 @@ Browser Event
 3. Portal 为什么能证明 React propagation 不只是 DOM parentNode traversal？
 4. nonDelegatedEvents 为什么存在？
 5. 一次 click 中 `setState` 的 lane 从哪里获得优先级信息？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** Portal 中按钮的 DOM 父节点与 React 逻辑父组件不同，合成事件按哪棵树传播？
+
+**参考解析：** React 可从宿主目标找回 Fiber，并按 Fiber 祖先关系收集监听器；不要等同于 DOM parentNode 链。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

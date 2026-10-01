@@ -1,5 +1,7 @@
 # 20. React Server Components 与 Flight：组件模型跨机器后的协议
 
+> 源码定位：点击 [createRequest](source:packages/react-server/src/ReactFlightServer.js#createRequest)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -269,3 +271,13 @@ bundler adapter
 3. Server Component 引用 Client Component 时服务器到底传什么？
 4. RSC + SSR 为什么可以同时存在？
 5. Server Action 为什么更像 RPC capability 而不是“函数序列化”？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 服务器发送 Flight payload 后，浏览器是否已经拿到可直接显示的 HTML？
+
+**参考解析：** 没有必然关系；Flight 传 React 模型/引用，Fizz/SSR 才负责 HTML，两种输出可组合。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

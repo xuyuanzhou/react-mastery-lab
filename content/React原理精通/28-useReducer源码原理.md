@@ -1,5 +1,7 @@
 # 28. useReducer 源码原理：同一套 Hook Queue 的另一种表达
 
+> 源码定位：点击 [updateReducerImpl](source:packages/react-reconciler/src/ReactFiberHooks.js#updateReducerImpl)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -159,3 +161,13 @@ scheduleUpdateOnFiber
 3. 如果 reducer 返回与当前 state `Object.is` 相同的值，React 能做什么优化？
 
 参考答案见 [`assessments/全章节自检题-参考答案.md`](assessments/全章节自检题-参考答案.md)。
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** useReducer 与 useState 为什么可共享 Hook 队列机制，又在哪一步不同？
+
+**参考解析：** 二者都记录 Update 并消费队列；reducer 决定 action 怎样从前一 state 算出下一 state。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

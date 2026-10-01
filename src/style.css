@@ -112,9 +112,10 @@ button.active {
   color: var(--accent);
 }
 .app {
+  --source-width: 420px;
   height: 100vh;
   display: grid;
-  grid-template-columns: 244px minmax(420px, 1fr) 420px;
+  grid-template-columns: 244px minmax(380px, 1fr) minmax(320px, min(var(--source-width), calc(100vw - 624px)));
   grid-template-rows: 72px minmax(0, 1fr);
   overflow: hidden;
 }
@@ -699,6 +700,7 @@ button.active {
   font-size: 8px;
 }
 .source-panel {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -706,6 +708,35 @@ button.active {
   background: var(--panel);
   border-left: 1px solid var(--line);
   overflow: hidden;
+}
+.source-resize-handle {
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 9px;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+}
+.source-resize-handle:hover,
+.source-resize-handle:focus-visible {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+.source-resize-handle::after {
+  content: "⋮";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 9px;
+  padding: 12px 0;
+  transform: translateY(-50%);
+  border-radius: 5px;
+  background: var(--raised);
+  color: var(--accent);
+  font-size: 16px;
+  text-align: center;
 }
 .panel-heading {
   display: flex;
@@ -745,6 +776,25 @@ button.active {
 .source-tools > a {
   margin-left: auto;
   color: var(--muted);
+}
+.source-tools .notes-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 5px 6px;
+  font-size: 9px;
+  white-space: nowrap;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.source-tools .notes-toggle.active {
+  color: var(--accent);
+  background: var(--tint);
+}
+.source-tools .notes-toggle + a {
+  margin-left: 0;
 }
 .source-tabs {
   display: flex;
@@ -843,6 +893,9 @@ button.active {
   background: #a6d27619;
   border-color: var(--accent);
 }
+.code-line.annotated {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+}
 .code-line > button {
   width: 45px;
   flex-shrink: 0;
@@ -858,6 +911,67 @@ button.active {
 }
 .code-line code {
   white-space: pre;
+}
+.code-line > .source-note-marker,
+.source-note-spacer {
+  width: 20px;
+  flex: 0 0 20px;
+  padding: 0;
+}
+.code-line > .source-note-marker {
+  position: static;
+  text-align: center;
+  color: var(--accent);
+  background: var(--tint);
+  font: 10px/20px sans-serif;
+  cursor: pointer;
+}
+.source-notes-list button {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  padding: 7px 6px;
+  border-bottom: 1px solid var(--line);
+}
+.source-notes-list strong {
+  font-size: 10px;
+  font-weight: 600;
+}
+.source-notes-list small {
+  margin-top: 3px;
+  color: var(--muted);
+  font: 9px monospace;
+}
+.source-note-card {
+  padding: 11px 15px;
+  border-bottom: 1px solid var(--line);
+  background: var(--tint);
+  font-size: 11px;
+  line-height: 1.55;
+}
+.source-note-card p {
+  margin: 6px 0;
+}
+.source-note-card .source-note-watch {
+  color: var(--muted);
+}
+.source-note-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+}
+.source-note-heading button {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  font-size: 18px;
+  line-height: 1;
+}
+.source-note-card a {
+  color: var(--accent);
+  font-size: 10px;
 }
 .source-footer {
   display: flex;
@@ -1520,7 +1634,8 @@ button.active {
 }
 @media (min-width: 1700px) {
   .app {
-    grid-template-columns: 260px minmax(600px, 1fr) 510px;
+    --source-width: 510px;
+    grid-template-columns: 260px minmax(380px, 1fr) minmax(320px, min(var(--source-width), calc(100vw - 640px)));
   }
   .main {
     padding: 0 55px;
@@ -1551,7 +1666,8 @@ button.active {
 }
 @media (max-width: 1250px) {
   .app {
-    grid-template-columns: 210px minmax(380px, 1fr) 335px;
+    --source-width: 335px;
+    grid-template-columns: 210px minmax(380px, 1fr) minmax(320px, min(var(--source-width), calc(100vw - 590px)));
   }
   .topbar {
     gap: 18px;
@@ -1617,6 +1733,9 @@ button.active {
     width: 390px;
     z-index: 10;
     box-shadow: -20px 0 60px #0008;
+  }
+  .source-resize-handle {
+    display: none;
   }
   .topbar nav {
     display: none;

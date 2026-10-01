@@ -1,5 +1,8 @@
 # 21. useSyncExternalStore：外部可变状态、Snapshot 与 Tearing
 
+> 源码定位：点击 [mountSyncExternalStore](source:packages/react-reconciler/src/ReactFiberHooks.js#mountSyncExternalStore)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/08-ExternalStore-Tearing.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -203,3 +206,13 @@ updateStoreInstance
 2. getSnapshot 为什么不能每次返回新对象？
 3. React 自己的 useState 为什么较少面临同样 tearing 问题？
 4. getServerSnapshot 与 hydration 有什么关系？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 外部 store 在 Render 与订阅建立之间变化，为什么只在 Effect 中 subscribe 可能不够？
+
+**参考解析：** 会有一致性窗口；useSyncExternalStore 结合 snapshot、订阅和一致性检查，要求稳定的 getSnapshot 结果。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

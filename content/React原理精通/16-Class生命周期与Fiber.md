@@ -1,5 +1,7 @@
 # 16. Class Component：Instance Model、UpdateQueue 与 Fiber 生命周期映射
 
+> 源码定位：点击 [ReactFiberClassComponent.js](source:packages/react-reconciler/src/ReactFiberClassComponent.js#L1)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -307,3 +309,13 @@ componentWillUnmount
 3. `getSnapshotBeforeUpdate` 为什么必须在 mutation 之前？
 4. UNSAFE lifecycle 的真正问题是“弃用”还是“与可重放 Render 冲突”？
 5. 为什么不能用 Class lifecycle 机械解释 Hooks？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 为什么 class instance 长期存在仍不能在 render 方法里发请求？
+
+**参考解析：** render 仍可能重做/放弃；外部副作用必须放到与 Commit 对应的安全阶段，instance 持久不改变此约束。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

@@ -36,6 +36,18 @@ const groupTitles = {
   engineering: "11 / 工程实践",
 };
 
+const groupOrder = Object.fromEntries(
+  Object.keys(groupTitles).map((group, index) => [group, index]),
+);
+
+const practiceOrder = new Map([
+  ["00C-从编译入口到浏览器像素-完整渲染链路.md", 700],
+  ["42-架构总复盘与核心不变量.md", 701],
+  ["43-从零到精通的因果知识图谱.md", 702],
+  ["44-React源码阅读核心不变量与证明.md", 703],
+  ["45-为什么React这样设计-架构权衡.md", 704],
+]);
+
 function classifyMaster(id) {
   const rel = id.slice(MASTER_PREFIX.length);
   const base = path.posix.basename(rel);
@@ -44,22 +56,43 @@ function classifyMaster(id) {
     const pn = Number(base.match(/^(\d{2})/)?.[1] ?? 0);
     return { group: "start", order: 20 + pn };
   }
-  if (rel.startsWith("labs/")) return { group: "practice", order: 810 };
-  if (rel.startsWith("assessments/")) return { group: "practice", order: 830 };
+  if (rel.startsWith("labs/")) {
+    const lab = Number(base.match(/^(\d{2})/)?.[1]);
+    return {
+      group: "practice",
+      order: Number.isFinite(lab) ? 810 + lab : 825,
+    };
+  }
+  if (rel.startsWith("assessments/")) {
+    const order = base.includes("全章节自检题")
+      ? base.includes("参考答案")
+        ? 832
+        : 831
+      : base.includes("综合挑战题")
+        ? base.includes("参考答案")
+          ? 835
+          : 834
+        : 838;
+    return { group: "practice", order };
+  }
   if (rel.startsWith("debugging/")) return { group: "practice", order: 850 };
   if (rel.startsWith("mini-react/")) return { group: "practice", order: 860 };
   if (rel.startsWith("source-learning-app/"))
     return { group: "practice", order: 870 };
   if (rel.startsWith("appendix/")) return { group: "reference", order: 900 };
   if (base === "课程路线-12周.md") return { group: "start", order: 2 };
-  if (base === "专家架构审计报告.md")
-    return { group: "architecture", order: 799 };
+  if (base.startsWith("18-源码阅读地图")) return { group: "start", order: 40 };
+  if (base.startsWith("41-源码编译运行")) return { group: "start", order: 41 };
+  if (base.startsWith("46-源码点击学习")) return { group: "start", order: 42 };
+  if (base === "专家架构审计报告.md") return { group: "practice", order: 705 };
+  if (practiceOrder.has(base))
+    return { group: "practice", order: practiceOrder.get(base) };
   if (base.startsWith("00P")) return { group: "start", order: 0 };
   if (base.startsWith("00A")) return { group: "start", order: 1 };
-  if (base.startsWith("00-")) return { group: "runtime", order: 10 };
-  if (base.startsWith("00B")) return { group: "runtime", order: 11 };
-  if (base.startsWith("00C")) return { group: "runtime", order: 12 };
-  if ([1, 2, 6, 7, 10, 37, 38, 42, 43, 44, 45].includes(n))
+  if (base.startsWith("00D")) return { group: "start", order: 35 };
+  if (base.startsWith("00-")) return { group: "runtime", order: 100 };
+  if (base.startsWith("00B")) return { group: "runtime", order: 101 };
+  if ([1, 2, 6, 7, 10, 37, 38].includes(n))
     return { group: "runtime", order: 100 + n };
   if ([3, 4, 5, 11, 12, 16, 24, 26, 27, 28, 29, 30, 32, 33].includes(n))
     return { group: "hooks", order: 200 + n };
@@ -68,19 +101,18 @@ function classifyMaster(id) {
   if ([14, 15, 20, 39].includes(n)) return { group: "server", order: 500 + n };
   if ([17, 19, 21, 22, 23, 25, 34, 40].includes(n))
     return { group: "architecture", order: 600 + n };
-  if ([18, 41, 46].includes(n)) return { group: "practice", order: 700 + n };
   return { group: "reference", order: 850 + (Number.isFinite(n) ? n : 0) };
 }
 
 const quickOrder = {
-  prerequisites: 1000,
-  core: 1010,
-  hooks: 1020,
-  concurrency: 1030,
-  server: 1040,
-  architecture: 1050,
-  labs: 1060,
-  assessments: 1070,
+  prerequisites: 0,
+  core: 1,
+  hooks: 2,
+  concurrency: 3,
+  server: 4,
+  architecture: 5,
+  labs: 6,
+  assessments: 7,
 };
 
 const chapters = [];
@@ -95,8 +127,8 @@ for (const p of await walk("content")) {
   const classified = isMastery
     ? classifyMaster(id)
     : top === "engineering"
-      ? { group: "engineering", order: 1200 + chapters.length }
-      : { group: "quick", order: (quickOrder[top] ?? 1090) + chapters.length };
+      ? { group: "engineering", order: chapters.length }
+      : { group: "quick", order: quickOrder[top] ?? 9 };
   chapters.push({
     id,
     title: body.match(/^#\s+(.+)/m)?.[1]?.trim() || path.basename(p, ".md"),
@@ -109,7 +141,9 @@ for (const p of await walk("content")) {
 
 chapters.sort(
   (a, b) =>
-    a.order - b.order || a.id.localeCompare(b.id, "zh-CN", { numeric: true }),
+    groupOrder[a.group] - groupOrder[b.group] ||
+    a.order - b.order ||
+    a.id.localeCompare(b.id, "zh-CN", { numeric: true }),
 );
 
 await fs.mkdir("src/generated", { recursive: true });

@@ -1,5 +1,7 @@
 # 10. 一次 setState 到屏幕像素：完整主干调用链
 
+> 源码定位：点击 [scheduleUpdateOnFiber](source:packages/react-reconciler/src/ReactFiberWorkLoop.js#scheduleUpdateOnFiber)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -390,3 +392,13 @@ ensureRootIsScheduled ≠ 直接开始 render
 3. **脱稿解释：** 不使用“React 就是这样规定的”作为理由，而是用本章的不变量解释 API 约束。
 
 达到精通标准时，你应该能回答：**如果删除本章某个关键数据结构或约束，系统具体会在哪一步失去正确性？**
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 从按钮点击到屏幕变化，按顺序串起事件优先级、Update、Root、Render、Commit、浏览器。
+
+**参考解析：** 事件建立优先级，setter 入队并选 lane，Root 安排工作，Render 处理队列和协调，Commit 更新 DOM，浏览器再绘制。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

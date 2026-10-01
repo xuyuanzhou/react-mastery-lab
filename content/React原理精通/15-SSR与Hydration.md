@@ -1,5 +1,8 @@
 # 15. SSR、Fizz Streaming、Hydration、Selective Hydration 与 PPR
 
+> 源码定位：点击 [enterHydrationState](source:packages/react-reconciler/src/ReactFiberHydrationContext.js#enterHydrationState)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/07-Hydration与EventReplay.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -389,3 +392,13 @@ blocked event target
 3. Event Replay 与 Selective Hydration 为什么必须配合？
 4. `useId` 为什么不能简单用 `Math.random()`？
 5. Fizz 与 RSC 分别传输什么？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 服务端 HTML 已经可见，但按钮尚不能可靠响应；分别说明 SSR、Hydration、Event Replay 的职责。
+
+**参考解析：** SSR 提供可见 HTML；Hydration 认领既有 DOM 并建立客户端运行时；受阻事件可触发选择性水合与合适的重放。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->

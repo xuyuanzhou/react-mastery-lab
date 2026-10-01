@@ -1,5 +1,8 @@
 # 14. Suspense：Thenable、Opaque Suspension、Ping、Retry 与 Replay
 
+> 源码定位：点击 [throwException](source:packages/react-reconciler/src/ReactFiberThrow.js#throwException)，在右侧查看 React v19.3.0 的实际实现。正文中的简化代码用于教学，请以该固定版本源码为准。
+> 学完即练：[对应实验](labs/06-Suspense-Ping-Retry.md)。先写预测，再观察源码和结果。
+
 <!-- TERMS-AUTO-START -->
 ## 本章专业术语（English → 中文）
 
@@ -382,3 +385,13 @@ boundary flags
 3. Suspense 为什么天然依赖 current/WIP 双缓冲？
 4. Transition + Suspense 为什么能避免已有 UI 立即闪成 fallback？
 5. Server Streaming 为什么也把 Suspense boundary 当关键单元？
+
+<!-- CHAPTER-CHECK-START -->
+## 本章情境自检与参考解析
+
+**先独立作答：** 组件读取 pending thenable 后，Promise resolve 能否直接改 DOM？后续必须经过哪些步骤？
+
+**参考解析：** 不能；resolve 触发 ping/retry，重新 Render 成功并 Commit 后才改变宿主树。
+
+答题时请写出导致这个结论的关键步骤，并用本章正文的示例或右侧固定版本源码核对。更多题目见[全章节自检题](assessments/全章节自检题.md)，对应的[参考答案](assessments/全章节自检题-参考答案.md)可供核对。
+<!-- CHAPTER-CHECK-END -->
