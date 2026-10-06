@@ -7,6 +7,9 @@ const root = process.cwd();
 const chapters = JSON.parse(
   fs.readFileSync(path.join(root, "src/generated/chapters.json"), "utf8"),
 );
+const sourceIndex = JSON.parse(
+  fs.readFileSync(path.join(root, "public/source-index.json"), "utf8"),
+);
 const basics = chapters.filter((chapter) => chapter.track === "basics");
 const expected = {
   basicsStart: 8,
@@ -55,11 +58,18 @@ test("每篇基础教程包含讲解、示例、动手练习、自检和官网�
       2,
       `${chapter.id}: unbalanced code fences`,
     );
-    const match = body.match(/\]\(source:([^)]*)\)/);
+    const match = body.match(/\]\(source:([^#)]+)#([^)]*)\)/);
     assert.ok(match, `${chapter.id}: missing source link`);
+    const [, sourcePath, symbol] = match;
     assert.ok(
-      fs.existsSync(path.join(root, "public/react-source", match[1])),
-      `${chapter.id}: unknown source ${match[1]}`,
+      fs.existsSync(path.join(root, "public/react-source", sourcePath)),
+      `${chapter.id}: unknown source ${sourcePath}`,
+    );
+    assert.ok(
+      sourceIndex.files
+        .find((file) => file.path === sourcePath)
+        ?.symbols.some((item) => item.name === symbol),
+      `${chapter.id}: unknown source symbol ${symbol}`,
     );
     for (const m of body.matchAll(/\]\((?!https?:|source:)([^)]+\.md)\)/g)) {
       assert.ok(

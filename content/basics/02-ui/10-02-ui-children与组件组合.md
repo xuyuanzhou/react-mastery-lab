@@ -44,7 +44,7 @@ export default function App() {
 ## 官方文档与源码连接
 
 - React 官方文档：[children 与组件组合](https://react.dev/learn/passing-props-to-a-component)。
-- 固定版源码：[ReactJSXElement.js](source:packages/react/src/jsx/ReactJSXElement.js)。
+- 固定版源码：[ReactJSXElement.js → ReactElement](source:packages/react/src/jsx/ReactJSXElement.js#ReactElement)。
 - 对照建议：学完组合后，继续让组件根据条件决定渲染内容。
 
 ## 完成标准

@@ -48,7 +48,7 @@ export default function App() {
 ## 官方文档与源码连接
 
 - React 官方文档：[Context 与跨层级共享](https://react.dev/learn/passing-data-deeply-with-context)。
-- 固定版源码：[ReactFiberNewContext.js](source:packages/react-reconciler/src/ReactFiberNewContext.js)。
+- 固定版源码：[ReactFiberNewContext.js → readContext](source:packages/react-reconciler/src/ReactFiberNewContext.js#readContext)。
 - 对照建议：下节把重复的状态与 Effect 逻辑提取到自定义 Hook。
 
 ## 完成标准

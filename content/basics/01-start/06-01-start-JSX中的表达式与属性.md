@@ -47,7 +47,7 @@ export default function Badge() {
 ## 官方文档与源码连接
 
 - React 官方文档：[JSX 中的表达式与属性](https://react.dev/learn/javascript-in-jsx-with-curly-braces)。
-- 固定版源码：[ReactJSXElement.js](source:packages/react/src/jsx/ReactJSXElement.js)。
+- 固定版源码：[ReactJSXElement.js → jsxDEVImpl](source:packages/react/src/jsx/ReactJSXElement.js#jsxDEVImpl)。
 - 对照建议：掌握表达式后，再建立可维护的组件样式方案。
 
 ## 完成标准

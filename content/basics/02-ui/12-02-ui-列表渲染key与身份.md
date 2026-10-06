@@ -44,7 +44,7 @@ export default function Tasks() {
 ## 官方文档与源码连接
 
 - React 官方文档：[列表渲染、key 与身份](https://react.dev/learn/rendering-lists)。
-- 固定版源码：[ReactChildFiber.js](source:packages/react-reconciler/src/ReactChildFiber.js)。
+- 固定版源码：[ReactChildFiber.js → reconcileChildrenArray](source:packages/react-reconciler/src/ReactChildFiber.js#reconcileChildrenArray)。
 - 对照建议：继续让列表和按钮响应用户的交互。
 
 ## 完成标准

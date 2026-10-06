@@ -46,7 +46,8 @@ export default function Subscribe() {
 ## 官方文档与源码连接
 
 - React 官方文档：[语义化与无障碍](https://react.dev/reference/react-dom/components/common)。
-- 固定版源码：[ReactDOMComponent.js](source:packages/react-dom-bindings/src/client/ReactDOMComponent.js)。
+- 固定版源码：[ReactDOMComponent.js → setInitialProperties](source:packages/react-dom-bindings/src/client/ReactDOMComponent.js#setInitialProperties)。
+- 源码阅读边界：语义化与无障碍首先依赖 HTML 和交互设计；`setInitialProperties` 设置 DOM 属性，但不能自动保证界面对键盘或辅助技术可用。
 - 对照建议：学完可访问性，再用性能工具识别真正的瓶颈。
 
 ## 完成标准

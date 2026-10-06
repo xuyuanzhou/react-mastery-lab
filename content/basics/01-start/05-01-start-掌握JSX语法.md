@@ -47,7 +47,7 @@ export default function Profile() {
 ## 官方文档与源码连接
 
 - React 官方文档：[掌握 JSX 语法](https://react.dev/learn/writing-markup-with-jsx)。
-- 固定版源码：[ReactJSXElement.js](source:packages/react/src/jsx/ReactJSXElement.js)。
+- 固定版源码：[ReactJSXElement.js → jsxDEV](source:packages/react/src/jsx/ReactJSXElement.js#jsxDEV)。
 - 对照建议：下一课理解花括号和样式如何让静态 JSX 动起来。
 
 ## 完成标准

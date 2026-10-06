@@ -45,7 +45,7 @@ export default function App() {
 ## 官方文档与源码连接
 
 - React Router 官方文档：[v7 声明式路由安装](https://reactrouter.com/7.18.4/start/declarative/installation)；本项目的[路由配置](project:src/app/routes.ts)可在右侧直接查看。
-- React 固定版源码：[ReactDOMRoot.js](source:packages/react-dom/src/client/ReactDOMRoot.js)只负责 React 根的创建，不实现路由匹配。路由逻辑应到 React Router 项目和本工程的路由文件查证。
+- React 固定版源码：[ReactDOMRoot.js → createRoot](source:packages/react-dom/src/client/ReactDOMRoot.js#createRoot)只负责 React 根的创建，不实现路由匹配。路由逻辑应到 React Router 项目和本工程的路由文件查证。
 - 对照建议：页面有了路由后，还需要处理真实请求的状态。
 
 ## 完成标准

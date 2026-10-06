@@ -54,7 +54,8 @@ function Post({ id }) {
 ## 官方文档与源码连接
 
 - React 官方文档：[异步数据请求与加载状态](https://react.dev/learn/you-might-not-need-an-effect)。
-- 固定版源码：[ReactFiberCommitWork.js](source:packages/react-reconciler/src/ReactFiberCommitWork.js)。
+- 固定版源码：[ReactFiberCommitWork.js → commitPassiveMountEffects](source:packages/react-reconciler/src/ReactFiberCommitWork.js#commitPassiveMountEffects)。
+- 源码阅读边界：`fetch` 与 `AbortController` 是浏览器 API；`commitPassiveMountEffects` 只用于观察 Effect 在提交后的处理，不是请求库。
 - 对照建议：下一课给组件、Props、事件加上 TypeScript 类型。
 
 ## 完成标准

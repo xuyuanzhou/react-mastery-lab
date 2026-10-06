@@ -44,7 +44,7 @@ export default function Shop() {
 ## 官方文档与源码连接
 
 - React 官方文档：[Props 与单向数据流](https://react.dev/learn/passing-props-to-a-component)。
-- 固定版源码：[ReactFiberBeginWork.js](source:packages/react-reconciler/src/ReactFiberBeginWork.js)。
+- 固定版源码：[ReactFiberBeginWork.js → updateFunctionComponent](source:packages/react-reconciler/src/ReactFiberBeginWork.js#updateFunctionComponent)。
 - 对照建议：下一课使用 children 完成容器与内容组合。
 
 ## 完成标准

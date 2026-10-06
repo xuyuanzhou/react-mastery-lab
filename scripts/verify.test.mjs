@@ -287,7 +287,7 @@ test("课程清单只含元数据，搜索正文按需加载且完整", () => {
   );
 });
 
-test("工程实践源码锚点有效，公开快照仅含白名单文件", async () => {
+test("全部本项目源码锚点有效，公开快照仅含白名单文件", async () => {
   const paths = new Set(projectIndex.files.map((file) => file.path));
   assert.ok(paths.has("src/main.tsx"));
   assert.ok(paths.has("mini-react/src/runtime.mjs"));
@@ -300,9 +300,7 @@ test("工程实践源码锚点有效，公开快照仅含白名单文件", async
         !/(^|\/)(node_modules|generated|\.env|\.git)(\/|$)/.test(file.path),
     ),
   );
-  for (const chapter of chapters.filter(
-    (item) => item.group === "engineering",
-  )) {
+  for (const chapter of chapters) {
     for (const match of (await chapterBody(chapter.id)).matchAll(
       /\]\(project:([^#)]+)(?:#([^)]*))?\)/g,
     )) {

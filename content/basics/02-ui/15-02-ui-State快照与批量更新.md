@@ -48,7 +48,7 @@ export default function Triple() {
 ## 官方文档与源码连接
 
 - React 官方文档：[State 快照与批量更新](https://react.dev/learn/queueing-a-series-of-state-updates)。
-- 固定版源码：[ReactFiberHooks.js](source:packages/react-reconciler/src/ReactFiberHooks.js)。
+- 固定版源码：[ReactFiberHooks.js → dispatchSetState](source:packages/react-reconciler/src/ReactFiberHooks.js#dispatchSetState)。
 - 对照建议：下一课将同样的思想用到对象与数组。
 
 ## 完成标准

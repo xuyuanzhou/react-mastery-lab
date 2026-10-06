@@ -44,7 +44,7 @@ export default function App() {
 ## 官方文档与源码连接
 
 - React 官方文档：[认识 React 与声明式 UI](https://react.dev/learn)。
-- 固定版源码：[ReactDOMRoot.js](source:packages/react-dom/src/client/ReactDOMRoot.js)。
+- 固定版源码：[ReactDOMRoot.js → createRoot](source:packages/react-dom/src/client/ReactDOMRoot.js#createRoot)。
 - 对照建议：先建立“状态 → 渲染 → 提交”的整体模型，再学习应用怎样启动。
 
 ## 完成标准

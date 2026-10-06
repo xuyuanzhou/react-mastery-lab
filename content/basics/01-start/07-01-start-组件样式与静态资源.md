@@ -47,7 +47,7 @@ export default function Card({ highlighted, children }) {
 ## 官方文档与源码连接
 
 - React 官方文档：[组件样式与静态资源](https://react.dev/learn/adding-styles)。
-- 固定版源码：[ReactDOMComponent.js](source:packages/react-dom-bindings/src/client/ReactDOMComponent.js)。
+- 固定版源码：[ReactDOMComponent.js → setInitialProperties](source:packages/react-dom-bindings/src/client/ReactDOMComponent.js#setInitialProperties)。
 - 对照建议：理解界面是组件树后，就能进入组件复用和数据传递。
 
 ## 完成标准

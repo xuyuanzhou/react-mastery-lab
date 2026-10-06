@@ -43,7 +43,8 @@ Vite 提供开发和构建链路；React 提供组件模型，React DOM 负责�
 ## 官方文档与源码连接
 
 - React 官方文档：[使用 Vite 创建 React 项目](https://react.dev/learn/build-a-react-app-from-scratch)。
-- 固定版源码：[ReactDOMRoot.js](source:packages/react-dom/src/client/ReactDOMRoot.js)。
+- 固定版源码：[ReactDOMRoot.js → createRoot](source:packages/react-dom/src/client/ReactDOMRoot.js#createRoot)。
+- 源码阅读边界：Vite 负责开发服务器与打包；`createRoot` 是 React DOM 的挂载入口，并不实现 Vite。对照本项目的 [Vite 配置](project:vite.config.ts) 和 [React 入口](project:src/main.tsx)，画出 `index.html → main.tsx → createRoot`。
 - 对照建议：本项目使用 HashRouter 和相对 base 路径，适配仓库子路径部署。
 
 ## 完成标准

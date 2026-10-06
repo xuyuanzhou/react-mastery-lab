@@ -47,7 +47,7 @@ export default function App() {
 ## 官方文档与源码连接
 
 - React 官方文档：[lazy、Suspense 与代码分割](https://react.dev/reference/react/lazy)。
-- 固定版源码：[ReactFiberBeginWork.js](source:packages/react-reconciler/src/ReactFiberBeginWork.js)。
+- 固定版源码：[ReactFiberBeginWork.js → mountLazyComponent](source:packages/react-reconciler/src/ReactFiberBeginWork.js#mountLazyComponent)。
 - 对照建议：正确性依靠自动化测试，而不只靠浏览器手动点击。
 
 ## 完成标准

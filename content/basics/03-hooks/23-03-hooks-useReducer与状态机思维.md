@@ -52,7 +52,7 @@ dispatch 提交发生的事件，reducer 根据旧状态与 action 计算新状�
 ## 官方文档与源码连接
 
 - React 官方文档：[useReducer 与状态机思维](https://react.dev/learn/extracting-state-logic-into-a-reducer)。
-- 固定版源码：[ReactFiberHooks.js](source:packages/react-reconciler/src/ReactFiberHooks.js)。
+- 固定版源码：[ReactFiberHooks.js → mountReducer](source:packages/react-reconciler/src/ReactFiberHooks.js#mountReducer)。
 - 对照建议：跨多层组件共享数据时，还需要理解 Context。
 
 ## 完成标准

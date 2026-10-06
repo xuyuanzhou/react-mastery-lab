@@ -51,7 +51,8 @@ export default function TodoApp() {
 ## 官方文档与源码连接
 
 - React 官方文档：[综合实战：从 Todo 到源码阅读](https://react.dev/learn/thinking-in-react)。
-- 固定版源码：[ReactFiberWorkLoop.js](source:packages/react-reconciler/src/ReactFiberWorkLoop.js)。
+- 固定版源码：[ReactFiberWorkLoop.js → scheduleUpdateOnFiber](source:packages/react-reconciler/src/ReactFiberWorkLoop.js#scheduleUpdateOnFiber)。
+- 源码阅读边界：`scheduleUpdateOnFiber` 只是更新链的一段；完整追踪还需要观察 Hook 队列、协调和 Commit。
 - 对照建议：下一阶段建议阅读“学习起点”，再依次进入 Fiber、Hooks、调度与并发。
 
 ## 完成标准

@@ -47,7 +47,7 @@ JSX 将组件身份交给 React，React 才能正确维护该组件的状态和�
 ## 官方文档与源码连接
 
 - React 官方文档：[创建组件与导入导出](https://react.dev/learn/your-first-component)。
-- 固定版源码：[ReactFiberBeginWork.js](source:packages/react-reconciler/src/ReactFiberBeginWork.js)。
+- 固定版源码：[ReactFiberBeginWork.js → updateFunctionComponent](source:packages/react-reconciler/src/ReactFiberBeginWork.js#updateFunctionComponent)。
 - 对照建议：接下来用 JSX 把 UI 结构写到 JavaScript 中。
 
 ## 完成标准

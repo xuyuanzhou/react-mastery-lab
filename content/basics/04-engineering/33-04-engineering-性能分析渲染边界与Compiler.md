@@ -44,7 +44,8 @@ export default function Measured({ children }) {
 ## 官方文档与源码连接
 
 - React 官方文档：[性能分析、渲染边界与 Compiler](https://react.dev/learn/react-compiler/introduction)。
-- 固定版源码：[ReactFiberBeginWork.js](source:packages/react-reconciler/src/ReactFiberBeginWork.js)。
+- 固定版源码：[ReactFiberBeginWork.js → updateMemoComponent](source:packages/react-reconciler/src/ReactFiberBeginWork.js#updateMemoComponent)。
+- 源码阅读边界：React Compiler 在编译阶段工作，`updateMemoComponent` 是运行时处理 `memo` 的路径；两者解决的问题相关，但不是同一个机制。
 - 对照建议：完成基础阶段后可以进入综合实战和源码主线。
 
 ## 完成标准

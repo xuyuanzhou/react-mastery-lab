@@ -46,7 +46,7 @@ export default function App() { return <><Counter /><Counter /></>; }
 ## 官方文档与源码连接
 
 - React 官方文档：[useState：组件的记忆](https://react.dev/learn/state-a-components-memory)。
-- 固定版源码：[ReactFiberHooks.js](source:packages/react-reconciler/src/ReactFiberHooks.js)。
+- 固定版源码：[ReactFiberHooks.js → mountState](source:packages/react-reconciler/src/ReactFiberHooks.js#mountState)。
 - 对照建议：理解 State 后，继续研究快照与批量更新的常见陷阱。
 
 ## 完成标准

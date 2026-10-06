@@ -48,7 +48,8 @@ it('点击后显示新计数', async () => {
 ## 官方文档与源码连接
 
 - React 官方文档：[组件测试与行为验证](https://react.dev/learn)。
-- 固定版源码：[ReactFiberWorkLoop.js](source:packages/react-reconciler/src/ReactFiberWorkLoop.js)。
+- 固定版源码：[ReactFiberWorkLoop.js → commitRoot](source:packages/react-reconciler/src/ReactFiberWorkLoop.js#commitRoot)。
+- 源码阅读边界：测试断言属于测试工具与应用代码；`commitRoot` 是 React 提交路径，不是测试框架。可对照本项目的 [目录交互测试](project:src/app/CourseSidebar.test.tsx)。
 - 对照建议：最后从可访问性和性能角度完善真实项目。
 
 ## 完成标准

@@ -44,7 +44,7 @@ export default function Search() {
 ## 官方文档与源码连接
 
 - React 官方文档：[useRef 与 DOM 引用](https://react.dev/learn/referencing-values-with-refs)。
-- 固定版源码：[ReactFiberHooks.js](source:packages/react-reconciler/src/ReactFiberHooks.js)。
+- 固定版源码：[ReactFiberHooks.js → mountRef](source:packages/react-reconciler/src/ReactFiberHooks.js#mountRef)。
 - 对照建议：理解 Ref 后，再评估 memo 相关性能工具。
 
 ## 完成标准

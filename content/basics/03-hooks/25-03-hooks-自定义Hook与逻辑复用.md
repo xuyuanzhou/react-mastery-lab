@@ -53,7 +53,7 @@ export default function Status() { return <p>{useOnline() ? '在线' : '离线'}
 ## 官方文档与源码连接
 
 - React 官方文档：[自定义 Hook 与逻辑复用](https://react.dev/learn/reusing-logic-with-custom-hooks)。
-- 固定版源码：[ReactFiberHooks.js](source:packages/react-reconciler/src/ReactFiberHooks.js)。
+- 固定版源码：[ReactFiberHooks.js → renderWithHooks](source:packages/react-reconciler/src/ReactFiberHooks.js#renderWithHooks)。
 - 对照建议：最后梳理 Hooks 规则与开发环境检查机制。
 
 ## 完成标准

@@ -49,7 +49,7 @@ export default function App({ users }) {
 ## 官方文档与源码连接
 
 - React 官方文档：[useMemo、useCallback 与 memo](https://react.dev/reference/react/useMemo)。
-- 固定版源码：[ReactFiberBeginWork.js](source:packages/react-reconciler/src/ReactFiberBeginWork.js)。
+- 固定版源码：[ReactFiberBeginWork.js → updateMemoComponent](source:packages/react-reconciler/src/ReactFiberBeginWork.js#updateMemoComponent)。
 - 对照建议：当状态更新变得复杂时，可以使用 reducer 建模。
 
 ## 完成标准

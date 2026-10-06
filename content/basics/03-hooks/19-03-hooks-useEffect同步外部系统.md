@@ -47,7 +47,7 @@ Effect 的职责是外部同步；派生数据和用户触发逻辑通常在渲�
 ## 官方文档与源码连接
 
 - React 官方文档：[useEffect：同步外部系统](https://react.dev/learn/synchronizing-with-effects)。
-- 固定版源码：[ReactFiberCommitWork.js](source:packages/react-reconciler/src/ReactFiberCommitWork.js)。
+- 固定版源码：[ReactFiberCommitWork.js → commitPassiveMountEffects](source:packages/react-reconciler/src/ReactFiberCommitWork.js#commitPassiveMountEffects)。
 - 对照建议：Effect 的正确性离不开对清理和依赖的理解。
 
 ## 完成标准

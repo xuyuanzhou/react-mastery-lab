@@ -44,7 +44,8 @@ console.log(names, nextUsers);
 ## 官方文档与源码连接
 
 - React 官方文档：[开发 React 必备的 JavaScript](https://react.dev/learn/javascript-in-jsx-with-curly-braces)。
-- 固定版源码：[ReactFiberHooks.js](source:packages/react-reconciler/src/ReactFiberHooks.js)。
+- 固定版源码：[ReactFiberHooks.js → renderWithHooks](source:packages/react-reconciler/src/ReactFiberHooks.js#renderWithHooks)。
+- 源码阅读边界：闭包、解构和展开运算符属于 JavaScript；`renderWithHooks` 展示 React 如何运行组件，但不是这些语言特性的实现。
 - 对照建议：如果 map、解构、闭包还不熟悉，可优先补齐这一课。
 
 ## 完成标准

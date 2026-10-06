@@ -48,7 +48,8 @@ export default function Search({ placeholder = '搜索', onSearch }: SearchProps
 ## 官方文档与源码连接
 
 - React 官方文档：[React 与 TypeScript](https://react.dev/learn/typescript)。
-- 固定版源码：[ReactHooks.js](source:packages/react/src/ReactHooks.js)。
+- 固定版源码：[ReactHooks.js → useState](source:packages/react/src/ReactHooks.js#useState)。
+- 源码阅读边界：TypeScript 在构建阶段检查类型；React 的 `ReactHooks.js` 使用 Flow。再对照本项目的 [tsconfig.json](project:tsconfig.json) 和 [进度类型](project:src/features/progress/useProgress.ts) 区分源码类型与应用类型。
 - 对照建议：接下来学习按需加载和 Suspense 的正确边界。
 
 ## 完成标准

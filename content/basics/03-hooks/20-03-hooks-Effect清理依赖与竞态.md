@@ -51,7 +51,7 @@ function User({ id }) {
 ## 官方文档与源码连接
 
 - React 官方文档：[Effect 清理、依赖与竞态](https://react.dev/learn/lifecycle-of-reactive-effects)。
-- 固定版源码：[ReactFiberCommitWork.js](source:packages/react-reconciler/src/ReactFiberCommitWork.js)。
+- 固定版源码：[ReactFiberCommitWork.js → commitPassiveUnmountEffects](source:packages/react-reconciler/src/ReactFiberCommitWork.js#commitPassiveUnmountEffects)。
 - 对照建议：接下来使用 ref 保存不会触发渲染的数据。
 
 ## 完成标准

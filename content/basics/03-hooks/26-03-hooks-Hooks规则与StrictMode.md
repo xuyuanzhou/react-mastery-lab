@@ -44,7 +44,7 @@ React 通过渲染过程中的 Hook 顺序关联和复用之前保存的 Hook �
 ## 官方文档与源码连接
 
 - React 官方文档：[Hooks 规则与 StrictMode](https://react.dev/reference/rules/rules-of-hooks)。
-- 固定版源码：[ReactFiberHooks.js](source:packages/react-reconciler/src/ReactFiberHooks.js)。
+- 固定版源码：[ReactFiberHooks.js → renderWithHooks](source:packages/react-reconciler/src/ReactFiberHooks.js#renderWithHooks)。
 - 对照建议：完成基础 Hooks 后，进入路由、请求和测试等工程实践。
 
 ## 完成标准
