@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Bookmark,
@@ -24,25 +25,38 @@ export default function CourseSidebar({
   mobileOpen: boolean;
   onNavigate: () => void;
 }) {
-  const validRead = progress.read.filter((id) =>
-    chapters.some((chapter) => chapter.id === id),
-  );
+  const activeChapterRef = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    if (!activeChapterId) return;
+    if (window.matchMedia?.("(max-width: 900px)")?.matches && !mobileOpen) {
+      return;
+    }
+    activeChapterRef.current?.scrollIntoView?.({ block: "nearest" });
+  }, [activeChapterId, mobileOpen]);
+
+  const readIds = new Set(progress.read);
+  const validRead = chapters.filter((chapter) => readIds.has(chapter.id));
   const percent = Math.round(
     (validRead.length / Math.max(1, chapters.length)) * 100,
   );
   const basics = chapters.filter((chapter) => chapter.track === "basics");
-  const basicsRead = basics.filter((chapter) =>
-    validRead.includes(chapter.id),
-  ).length;
+  const basicsRead = basics.filter((chapter) => readIds.has(chapter.id)).length;
+  const advancedRead = validRead.length - basicsRead;
+  const advancedCount = chapters.length - basics.length;
   const courseGroups = [
     ...new Set([
       ...Object.keys(groups),
       ...chapters.map((chapter) => chapter.group),
     ]),
   ];
-  const activeGroup =
-    chapters.find((chapter) => chapter.id === activeChapterId)?.group ??
-    "basicsStart";
+  const activeChapter = chapters.find(
+    (chapter) => chapter.id === activeChapterId,
+  );
+  const activeGroup = activeChapter?.group ?? "basicsStart";
+  const activeGroupLabel = (groups[activeGroup] || activeGroup).replace(
+    /^基础\s*/,
+    "",
+  );
   const activeTrack = activeGroup.startsWith("basics") ? "basics" : "advanced";
   const tracks = [
     {
@@ -89,10 +103,19 @@ export default function CourseSidebar({
       <div className="sidebar-label">
         课程目录 <span>{chapters.length} 篇</span>
       </div>
+      {activeChapter && (
+        <div className="sidebar-current" title={activeChapter.title}>
+          当前阶段 · {activeGroupLabel}
+        </div>
+      )}
       <div className="course-tree">
         {tracks.map((track) => {
-          const count = chapters.filter((chapter) =>
+          const trackChapters = chapters.filter((chapter) =>
             track.groups.includes(chapter.group),
+          );
+          const count = trackChapters.length;
+          const readCount = trackChapters.filter((chapter) =>
+            readIds.has(chapter.id),
           ).length;
           return (
             <details
@@ -105,7 +128,9 @@ export default function CourseSidebar({
                   <strong>{track.title}</strong>
                   <span>{track.subtitle}</span>
                 </div>
-                <small>{count} 篇</small>
+                <small title={`已读 ${readCount} / ${count} 篇`}>
+                  {readCount}/{count} 已读
+                </small>
                 <ChevronDown size={15} />
               </summary>
               <div className="course-track-groups">
@@ -114,6 +139,9 @@ export default function CourseSidebar({
                     (chapter) => chapter.group === group,
                   );
                   if (!list.length) return null;
+                  const groupRead = list.filter((chapter) =>
+                    readIds.has(chapter.id),
+                  ).length;
                   const label = (groups[group] || group).replace(
                     /^基础\s*/,
                     "",
@@ -127,10 +155,17 @@ export default function CourseSidebar({
                       <summary className="course-section-summary">
                         <ChevronDown size={13} />
                         <span>{label}</span>
-                        <small>{list.length}</small>
+                        <small title={`已读 ${groupRead} / ${list.length} 篇`}>
+                          {groupRead}/{list.length}
+                        </small>
                       </summary>
                       {list.map((chapter, index) => (
                         <Link
+                          ref={
+                            chapter.id === activeChapterId
+                              ? activeChapterRef
+                              : undefined
+                          }
                           title={chapter.title}
                           key={chapter.id}
                           className={
@@ -142,10 +177,10 @@ export default function CourseSidebar({
                           <span
                             className={
                               "chapter-status " +
-                              (progress.read.includes(chapter.id) ? "done" : "")
+                              (readIds.has(chapter.id) ? "done" : "")
                             }
                           >
-                            {progress.read.includes(chapter.id) ? (
+                            {readIds.has(chapter.id) ? (
                               <Check size={11} />
                             ) : (
                               String(index + 1).padStart(2, "0")
@@ -175,8 +210,10 @@ export default function CourseSidebar({
           <i style={{ width: percent + "%" }} />
         </div>
         <small>
-          已完成 {validRead.length} / {chapters.length} 篇 · 基础 {basicsRead} /{" "}
-          {basics.length} 篇
+          已完成 {validRead.length} / {chapters.length} 篇
+          <br />
+          基础 {basicsRead}/{basics.length} · 进阶 {advancedRead}/
+          {advancedCount}
         </small>
       </div>
     </aside>

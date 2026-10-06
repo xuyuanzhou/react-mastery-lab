@@ -36,6 +36,7 @@ describe("课程目录层级", () => {
     expect(tracks).toHaveLength(2);
     expect(tracks[0].open).toBe(true);
     expect(tracks[1].open).toBe(false);
+    expect(view.getByText("当前阶段 · 01 / React 入门")).toBeTruthy();
     expect(
       tracks[0].querySelectorAll<HTMLDetailsElement>(".course-section[open]"),
     ).toHaveLength(1);
@@ -60,6 +61,7 @@ describe("课程目录层级", () => {
       1,
     );
     expect(basicsSections[1].open).toBe(true);
+    expect(view.getByText("当前阶段 · 02 / 组件与交互")).toBeTruthy();
 
     view.rerender(
       <MemoryRouter>
@@ -79,5 +81,30 @@ describe("课程目录层级", () => {
     expect(
       moved[1].querySelectorAll<HTMLDetailsElement>(".course-section[open]"),
     ).toHaveLength(1);
+  });
+
+  it("分别展示基础与进阶的已读进度", () => {
+    const basics = chapters.find((chapter) => chapter.group === "basicsStart")!;
+    const advanced = chapters.find((chapter) => chapter.group === "runtime")!;
+    const advancedCount = chapters.filter(
+      (chapter) => chapter.track !== "basics",
+    ).length;
+    const view = render(
+      <MemoryRouter>
+        <CourseSidebar
+          progress={{ ...progress, read: [basics.id, basics.id, advanced.id] }}
+          activeChapterId={basics.id}
+          pathname="/learn"
+          mobileOpen={false}
+          onNavigate={() => {}}
+        />
+      </MemoryRouter>,
+    );
+
+    expect(view.getByText("1/34 已读")).toBeTruthy();
+    expect(view.getByText(`1/${advancedCount} 已读`)).toBeTruthy();
+    expect(
+      view.container.querySelector(".progress-card small")?.textContent,
+    ).toMatch(new RegExp(`基础\\s*1/34\\s*·\\s*进阶\\s*1/${advancedCount}`));
   });
 });

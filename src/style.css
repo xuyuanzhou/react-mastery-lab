@@ -282,6 +282,15 @@ button.active {
 .sidebar-label span {
   letter-spacing: 0;
 }
+.sidebar-current {
+  margin: -7px 12px 12px;
+  padding: 7px 9px;
+  border-left: 2px solid var(--accent);
+  color: var(--text);
+  background: var(--tint);
+  font-size: 10px;
+  line-height: 1.5;
+}
 .course-tree {
   overflow: auto;
   flex: 1;
@@ -379,8 +388,10 @@ button.active {
 }
 .course-tree a > span:nth-child(2) {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 .course-tree a:hover {
   background: var(--raised);
